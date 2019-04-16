@@ -1,4 +1,4 @@
-import java.awt.Image;
+import java.awt.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
@@ -45,5 +45,10 @@ public class Sprite extends JComponent{
     
     public void setImage(Image i) {
         img = i;
+    }
+    
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.drawImage(img, x, y, null);
     }
 }
