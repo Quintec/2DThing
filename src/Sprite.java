@@ -48,6 +48,10 @@ public class Sprite extends JComponent{
         img = i;
     }
     
+    public void fireBoom() {
+        
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         //System.out.println("painting");
@@ -61,5 +65,18 @@ public class Sprite extends JComponent{
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(img.getWidth(null), img.getHeight(null));
+    }
+    
+    private class Boomerang extends SwingWorker<Object, Object> {
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        @Override
+        protected void done() {
+            
+        }
     }
 }

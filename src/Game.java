@@ -8,7 +8,7 @@ public class Game{
     private KeyboardListener kbl;
     private Sprite main;
     
-    private static int SPEED = 10;
+    private static int SPEED = 1;
     
     public static void main(String[] args) throws IOException{
         new Game().start();
@@ -31,23 +31,22 @@ public class Game{
     
     public void start() {
         while (true) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                //Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            try { Thread.sleep(10);} catch (InterruptedException ex) {}
             HashSet<Integer> keys = kbl.getPresssed();
-            if (keys.contains(37)) {
+            if (keys.contains(32)) {//space
+                
+            }
+            if (keys.contains(37) || keys.contains(65)) {//left
                 //System.out.println("37");
                 main.incX(-SPEED);
             }
-            if (keys.contains(38)) {
+            if (keys.contains(38) || keys.contains(87)) {//up
                 main.incY(-SPEED);
             }
-            if (keys.contains(39)) {
+            if (keys.contains(39) || keys.contains(68)) {//right
                 main.incX(SPEED);
             }
-            if (keys.contains(40)) {
+            if (keys.contains(40) || keys.contains(83)) {//down
                 main.incY(SPEED);
             }
             frame.repaint();
