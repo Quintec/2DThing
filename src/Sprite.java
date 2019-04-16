@@ -13,6 +13,7 @@ public class Sprite extends JComponent{
         this.x = xc;
         this.y = yc;
         this.img = ImageIO.read(new File(path));
+        this.setLocation(0, 0);
     }
     
     public int getX() {
@@ -47,8 +48,18 @@ public class Sprite extends JComponent{
         img = i;
     }
     
+    @Override
     protected void paintComponent(Graphics g) {
+        //System.out.println("painting");
+        super.paintComponent(g);
+        this.setLocation(x, y);
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(img, x, y, null);
+        //g2.clearRect(0, 0, this.getWidth(), this.getHeight());
+        g2.drawImage(img, 0, 0, null);
+    }
+    
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(img.getWidth(null), img.getHeight(null));
     }
 }
