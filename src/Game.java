@@ -34,7 +34,7 @@ public class Game{
             try { Thread.sleep(10);} catch (InterruptedException ex) {}
             HashSet<Integer> keys = kbl.getPresssed();
             if (keys.contains(32)) {//space
-                
+                main.fireBoom();
             }
             if (keys.contains(37) || keys.contains(65)) {//left
                 //System.out.println("37");

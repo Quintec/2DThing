@@ -2,17 +2,21 @@ import java.awt.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
-//TODO: PAINT COMPONENT IN SPRITE INSTEAD OF WINDOW
+
 public class Sprite extends JComponent{
     private int x;
     private int y;
     
     private Image img;
     
-    public Sprite(int xc, int yc, String path) throws IOException{
+    public Sprite(int xc, int yc, String path) {
         this.x = xc;
         this.y = yc;
-        this.img = ImageIO.read(new File(path));
+        try {
+            this.img = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
         this.setLocation(0, 0);
     }
     
@@ -71,7 +75,7 @@ public class Sprite extends JComponent{
 
         @Override
         protected Object doInBackground() throws Exception {
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return null;
         }
         
         @Override
