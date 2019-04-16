@@ -2,8 +2,8 @@ import java.awt.Image;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
-
-public class Sprite {
+//TODO: PAINT COMPONENT IN SPRITE INSTEAD OF WINDOW
+public class Sprite extends JComponent{
     private int x;
     private int y;
     
@@ -25,6 +25,14 @@ public class Sprite {
     
     public Image getImage() {
         return img;
+    }
+    
+    public void setX(int ax) {
+        x = ax;
+    }
+    
+    public void setY(int ay) {
+        y = ay;
     }
     
     public void incX(int nx) {
