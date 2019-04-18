@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Game{
     private JFrame frame;
     private KeyboardListener kbl;
-    private Sprite main;
+    private Character main;
     
     private static int SPEED = 1;
     
@@ -17,8 +17,8 @@ public class Game{
     public Game() throws IOException {
         frame = new JFrame();  
         
-        frame.setSize(new Dimension(100, 100));
-        main = new Sprite(0, 0, "ball.png");
+        frame.setSize(new Dimension(300, 300));
+        main = new Character(0, 0, "ball.png");
         frame.getContentPane().add(main);
         
         kbl = new KeyboardListener();
@@ -34,7 +34,7 @@ public class Game{
             try { Thread.sleep(10);} catch (InterruptedException ex) {}
             HashSet<Integer> keys = kbl.getPresssed();
             if (keys.contains(32)) {//space
-                main.fireBoom();
+                //main.fireWeapon("Boomerang");
             }
             if (keys.contains(37) || keys.contains(65)) {//left
                 //System.out.println("37");

@@ -2,21 +2,25 @@ import java.awt.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
+import java.lang.reflect.*;
 
 public class Sprite extends JComponent{
-    private int x;
-    private int y;
     
-    private Image img;
+    protected int x;
+    protected int y;
+    
+    protected Image img;
     
     public Sprite(int xc, int yc, String path) {
         this.x = xc;
         this.y = yc;
+        
         try {
             this.img = ImageIO.read(new File(path));
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
+        
         this.setLocation(0, 0);
     }
     
@@ -30,6 +34,10 @@ public class Sprite extends JComponent{
     
     public Image getImage() {
         return img;
+    }
+ 
+    public void setImage(Image i) {
+        img = i;
     }
     
     public void setX(int ax) {
@@ -48,14 +56,6 @@ public class Sprite extends JComponent{
         y += ny;
     }
     
-    public void setImage(Image i) {
-        img = i;
-    }
-    
-    public void fireBoom() {
-        
-    }
-    
     @Override
     protected void paintComponent(Graphics g) {
         //System.out.println("painting");
@@ -71,16 +71,4 @@ public class Sprite extends JComponent{
         return new Dimension(img.getWidth(null), img.getHeight(null));
     }
     
-    private class Boomerang extends SwingWorker<Object, Object> {
-
-        @Override
-        protected Object doInBackground() throws Exception {
-            return null;
-        }
-        
-        @Override
-        protected void done() {
-            
-        }
-    }
 }
