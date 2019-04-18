@@ -8,7 +8,7 @@ public class Character extends Sprite {
     
     public Character(int xc, int yc, String path, int w, int h) {
         super(xc, yc, path, w, h);
-        this.mp = 0;
+        this.mp = 100;
     }
         
     public void fireWeapon(String name) {//TODO: Specify direction

@@ -5,6 +5,7 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     
     protected String type;
     protected Character user;
+    protected int mpReq;
     protected Sprite wep;
     protected int stage;
     
@@ -15,10 +16,11 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     
     protected Container parent;
         
-    public Weapon(String t, Character s, int d, Container jc, int w, int h) {
+    public Weapon(String t, int mpr, Character s, int d, Container jc, int w, int h) {
         this.type = t;
         this.user = s;
         this.stage = 1;
+        this.mpReq = mpr;
         
         this.width = w;
         this.height = w;
@@ -28,7 +30,14 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
         this.parent = jc;
     }
     
-    public abstract boolean activate();//initialize weapon - subtract cost, etc. returns whether the weapon should fire or not
+    public boolean activate() {
+        if (user.getMP() >= this.mpReq) {
+            user.incMP(-this.mpReq);
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     public void init() {
         this.wep = new Sprite(this.user.getX(), this.user.getY(), type + stage + ".png", 20, 20);
