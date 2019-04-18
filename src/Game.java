@@ -18,7 +18,7 @@ public class Game{
         frame = new JFrame();  
         
         frame.setSize(new Dimension(300, 300));
-        main = new Character(0, 0, "ball.png");
+        main = new Character(0, 0, "ball.png", 20, 20);
         frame.getContentPane().add(main);
         
         kbl = new KeyboardListener();
@@ -33,9 +33,6 @@ public class Game{
         while (true) {
             try { Thread.sleep(10);} catch (InterruptedException ex) {}
             HashSet<Integer> keys = kbl.getPresssed();
-            if (keys.contains(32)) {//space
-                //main.fireWeapon("Boomerang");
-            }
             if (keys.contains(37) || keys.contains(65)) {//left
                 //System.out.println("37");
                 main.incX(-SPEED);
@@ -66,12 +63,14 @@ public class Game{
 
         @Override
         public void keyTyped(KeyEvent e) {
-           //use for press actions
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-            pressed.add(e.getKeyCode());
+            if (e.getKeyCode() == 32)
+                main.fireWeapon("Boomerang");
+            else
+                pressed.add(e.getKeyCode());
         }
 
         @Override

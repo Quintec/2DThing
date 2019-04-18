@@ -6,16 +6,16 @@ public class Character extends Sprite {
         
     private int mp;
     
-    public Character(int xc, int yc, String path) {
-        super(xc, yc, path);
+    public Character(int xc, int yc, String path, int w, int h) {
+        super(xc, yc, path, w, h);
         this.mp = 0;
     }
         
     public void fireWeapon(String name) {//TODO: Specify direction
         try {
             Class<?> cl = Class.forName(name);
-            Constructor<?> c = cl.getConstructor(new Class[]{Sprite.class, int.class, int.class, int.class, Container.class});
-            Weapon w = (Weapon)c.newInstance(this, this.x, this.y, 0, this.getParent());
+            Constructor<?> c = cl.getConstructor(new Class[]{Character.class, int.class, Container.class});
+            Weapon w = (Weapon)c.newInstance(this, 0, this.getParent());
             if (w.activate())
                 w.execute();
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException

@@ -9,14 +9,20 @@ public class Sprite extends JComponent{
     protected int x;
     protected int y;
     
+    protected int width;
+    protected int height;
+    
     protected Image img;
     
-    public Sprite(int xc, int yc, String path) {
+    public Sprite(int xc, int yc, String path, int w, int h) {
         this.x = xc;
         this.y = yc;
         
+        this.width = w;
+        this.height = h;
+        
         try {
-            this.img = ImageIO.read(new File(path));
+            this.img = ImageIO.read(new File(path)).getScaledInstance(this.width, this.height, Image.SCALE_DEFAULT);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -40,6 +46,18 @@ public class Sprite extends JComponent{
         img = i;
     }
     
+    public void setImage(String path) {
+        try {
+            this.img = ImageIO.read(new File(path)).getScaledInstance(this.width, this.height, Image.SCALE_DEFAULT);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    
+    public void resizeTo(int w, int h) {
+        this.img = this.img.getScaledInstance(w, h, Image.SCALE_DEFAULT);
+    }
+    
     public void setX(int ax) {
         x = ax;
     }
@@ -60,8 +78,10 @@ public class Sprite extends JComponent{
     protected void paintComponent(Graphics g) {
         //System.out.println("painting");
         super.paintComponent(g);
+        
         this.setLocation(x, y);
         Graphics2D g2 = (Graphics2D) g;
+        
         //g2.clearRect(0, 0, this.getWidth(), this.getHeight());
         g2.drawImage(img, 0, 0, null);
     }
