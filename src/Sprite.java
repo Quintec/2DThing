@@ -59,19 +59,26 @@ public class Sprite extends JComponent{
     }
     
     public void setX(int ax) {
-        x = ax;
+        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width)
+            x = ax;
     }
     
     public void setY(int ay) {
-        y = ay;
+        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height)
+            y = ay;
     }
     
     public void incX(int nx) {
-        x += nx;
+        int ax = x + nx;
+        //System.out.println(ax);
+        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width)
+            x += nx;
     }
     
     public void incY(int ny) {
-        y += ny;
+        int ay = y + ny;
+        if (0 <= ay && ay <= Game.BOARD_HEIGHT - 2 * this.height)
+            y += ny;
     }
     
     @Override

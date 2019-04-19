@@ -8,6 +8,6 @@ public class BasicEnemy extends Enemy {
 
     @Override
     public void update() {
-
+        
     }
 }
