@@ -10,7 +10,9 @@ public class Game {
     private JPanel control;
     private DrawPanel pad;
     private MPBar mpBar;
+    private HPBar hpBar;
     private JLabel mpLabel;
+    private JLabel hpLabel;
     private Character main;
     
     private static final int IM = JComponent.WHEN_FOCUSED;
@@ -34,6 +36,9 @@ public class Game {
     
     public static final Color MP_BG = new Color(128, 159, 255);
     public static final Color MP_FILL = new Color(0, 64, 255);
+    
+    public static final Color HP_BG = new Color(255, 128, 128);
+    public static final Color HP_FILL = new Color(255, 0, 0);
 
     public static void main(String[] args) throws IOException {
         new Game().start();
@@ -47,10 +52,16 @@ public class Game {
         pad = new DrawPanel();
         
         mpBar = new MPBar();
-        mpLabel = new JLabel("MP: 100/100");
+        mpLabel = new JLabel("MP: " + Character.MAX_MP + "/" + Character.MAX_MP);
         mpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
         mpLabel.setForeground(Color.WHITE);
         mpBar.add(mpLabel);
+        
+        hpBar = new HPBar();
+        hpLabel = new JLabel("HP: " + Character.MAX_HP + "/" + Character.MAX_HP);
+        hpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+        hpLabel.setForeground(Color.WHITE);
+        hpBar.add(hpLabel);
         
         main = new Character(0, 0, "ball.png", 20, 20);
         
@@ -60,6 +71,7 @@ public class Game {
         control.setLayout(new BoxLayout(control, BoxLayout.Y_AXIS));
         control.add(pad);
         control.add(mpBar);
+        control.add(hpBar);
         
         frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT));
         frame.getContentPane().add(control, BorderLayout.SOUTH);
@@ -124,7 +136,7 @@ public class Game {
             
             if (pad.ml.finishedShape()) {
                 int shape = this.getShape(pad.ml.getDragged());
-                System.out.println(shape);
+                //System.out.println(shape);
                 if (shape == Game.CIRCLE) {
                     main.fireWeapon("Boomerang");
                 } else if (shape == Game.HOR_LINE) {
@@ -206,6 +218,23 @@ public class Game {
             g.setColor(MP_FILL);
             g.fillRect(0, 0, (int) (main.getMP() * 1.0 / Character.MAX_MP * this.getWidth()), this.getHeight());
             mpLabel.setText("MP: " + main.getMP() + "/" + Character.MAX_MP);
+        }
+        
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
+        }
+    }
+    
+    private class HPBar extends JPanel {
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            g.setColor(HP_BG);
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g.setColor(HP_FILL);
+            g.fillRect(0, 0, (int) (main.getHP() * 1.0 / Character.MAX_HP * this.getWidth()), this.getHeight());
+            mpLabel.setText("MP: " + main.getHP() + "/" + Character.MAX_HP);
         }
         
         @Override

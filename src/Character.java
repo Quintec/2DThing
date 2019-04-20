@@ -5,12 +5,15 @@ import java.lang.reflect.*;
 public class Character extends Sprite {
     
     public static final int MAX_MP = 100;
+    public static final int MAX_HP = 100;
         
     private int mp;
+    private int hp;
     
     public Character(int xc, int yc, String path, int w, int h) {
         super(xc, yc, path, w, h);
         this.mp = MAX_MP;
+        this.hp = MAX_HP;
     }
         
     public void fireWeapon(String name) {//TODO: Specify direction
@@ -28,6 +31,8 @@ public class Character extends Sprite {
         if (b.activate())
             b.execute();*/
     }
+    
+    
         
     public int getMP() {
         return mp;
@@ -39,7 +44,21 @@ public class Character extends Sprite {
     }
     
     public void setMP(int m) {
-        if (m < MAX_MP)
+        if (m <= MAX_MP)
             mp = m;
+    }
+    
+    public int getHP() {
+        return hp;
+    }
+    
+    public void incHP(int h) {
+        if (hp + h <= MAX_HP)
+            hp += h;
+    }
+    
+    public void setHP(int h) {
+        if (h <= MAX_HP)
+            hp = h;
     }
 }
