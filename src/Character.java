@@ -3,12 +3,14 @@ import java.lang.reflect.*;
 
 
 public class Character extends Sprite {
+    
+    public static final int MAX_MP = 100;
         
     private int mp;
     
     public Character(int xc, int yc, String path, int w, int h) {
         super(xc, yc, path, w, h);
-        this.mp = 100;
+        this.mp = MAX_MP;
     }
         
     public void fireWeapon(String name) {//TODO: Specify direction
@@ -32,10 +34,12 @@ public class Character extends Sprite {
     }
     
     public void incMP(int m) {
-        mp += m;
+        if (mp + m <= MAX_MP)
+            mp += m;
     }
     
     public void setMP(int m) {
-        mp = m;
+        if (m < MAX_MP)
+            mp = m;
     }
 }
