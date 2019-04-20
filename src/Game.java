@@ -10,8 +10,9 @@ public class Game {
     private JFrame frame;
     private JFrame control;
     private DrawPanel pad;
-    private KeyboardListener kbl;
     private Character main;
+
+    private HashSet<Integer> keys;
 
     public static final int CIRCLE = 0;
     public static final int HOR_LINE = 1;
@@ -19,11 +20,12 @@ public class Game {
     public static final int SQUARE = 3;
 
     private static final int SPEED = 1;
-    
+
     public static final int BOARD_WIDTH = 300;
     public static final int BOARD_HEIGHT = 300;
     //public static final int DRAW_WIDTH = 300;
     public static final int DRAW_HEIGHT = 300;
+    public static final int BAR_HEIGHT = 75;
 
     public static void main(String[] args) throws IOException {
         new Game().start();
@@ -33,38 +35,60 @@ public class Game {
         frame = new JFrame();
         control = new JFrame();
         pad = new DrawPanel();
-        
-        pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), 
-                                                         BorderFactory.createLoweredBevelBorder()));
 
-        frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT));
+        pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
+                BorderFactory.createLoweredBevelBorder()));
+
+        frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT));
         main = new Character(0, 0, "ball.png", 20, 20);
         frame.getContentPane().add(pad, BorderLayout.SOUTH);
         frame.getContentPane().add(main);
 
-        //control.setContentPane(pad);
+        initBindings();
 
-        kbl = new KeyboardListener();
-        frame.addKeyListener(kbl);
-
-        //frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-       /* control.setLocationRelativeTo(frame);
-        control.setSize(new Dimension(300, 300));
-        control.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        control.setVisible(true);*/
+
+    }
+
+    private void initBindings() {
+        keys = new HashSet<Integer>();
+
+        main.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "left");
+        main.getInputMap().put(KeyStroke.getKeyStroke("UP"), "up");
+        main.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "right");
+        main.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
+
+        main.getInputMap().put(KeyStroke.getKeyStroke("A"), "left");
+        main.getInputMap().put(KeyStroke.getKeyStroke("W"), "up");
+        main.getInputMap().put(KeyStroke.getKeyStroke("D"), "right");
+        main.getInputMap().put(KeyStroke.getKeyStroke("S"), "down");
+
+        main.getInputMap().put(KeyStroke.getKeyStroke("released LEFT"), "rleft");
+        main.getInputMap().put(KeyStroke.getKeyStroke("released UP"), "rup");
+        main.getInputMap().put(KeyStroke.getKeyStroke("released RIGHT"), "rright");
+        main.getInputMap().put(KeyStroke.getKeyStroke("released DOWN"), "rdown");
+
+        main.getInputMap().put(KeyStroke.getKeyStroke("released A"), "rleft");
+        main.getInputMap().put(KeyStroke.getKeyStroke("released W"), "rup");
+        main.getInputMap().put(KeyStroke.getKeyStroke("released D"), "rright");
+        main.getInputMap().put(KeyStroke.getKeyStroke("released S"), "rdown");
+
+        main.getActionMap().put("left", new ActionWrapper((e)->keys.add(37)));
+        main.getActionMap().put("up", new ActionWrapper((e)->keys.add(38)));
+        main.getActionMap().put("right", new ActionWrapper((e)->keys.add(39)));
+        main.getActionMap().put("down", new ActionWrapper((e)->keys.add(40)));
+
+        main.getActionMap().put("rleft", new ActionWrapper((e)->keys.remove(37)));
+        main.getActionMap().put("rup", new ActionWrapper((e)->keys.remove(38)));
+        main.getActionMap().put("rright", new ActionWrapper((e)->keys.remove(39)));
+        main.getActionMap().put("rdown", new ActionWrapper((e)->keys.remove(40)));
     }
 
     public void start() {
         while (true) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-            }
-            HashSet<Integer> keys = kbl.getPresssed();
+            try {Thread.sleep(10);} catch (InterruptedException ex) {}
             if (keys.contains(37) || keys.contains(65)) {//left
-                //System.out.println("37");
                 main.incX(-SPEED);
             }
             if (keys.contains(38) || keys.contains(87)) {//up
@@ -76,17 +100,15 @@ public class Game {
             if (keys.contains(40) || keys.contains(83)) {//down
                 main.incY(SPEED);
             }
-            //System.out.println(main.getX() + ", " + main.getY());
+            
             if (pad.ml.finishedShape()) {
                 int shape = this.getShape(pad.ml.getDragged());
-                if (shape == Game.CIRCLE)
+                if (shape == Game.CIRCLE) {
                     main.fireWeapon("Boomerang");
-                //System.out.println(this.getShape(pad.ml.getDragged()));
+                }
             }
 
             frame.repaint();
-            //control.repaint();
-            pad.repaint();
         }
     }
 
@@ -131,42 +153,22 @@ public class Game {
         return min;
     }
 
-    private class KeyboardListener implements KeyListener {
+    public class ActionWrapper extends AbstractAction {
 
-        private HashSet<Integer> pressed;
+        ActionListener al;
 
-        public KeyboardListener() {
-            pressed = new HashSet<Integer>();
-        }
-
-        private HashSet<Integer> getPresssed() {
-            return pressed;
+        public ActionWrapper(ActionListener a) {
+            this.al = a;
         }
 
         @Override
-        public void keyTyped(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            /*if (e.getKeyCode() == 32) {
-                main.fireWeapon("Boomerang");
-            } else {*/
-                pressed.add(e.getKeyCode());
-           // }
-          // System.out.println(e);
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            pressed.remove(e.getKeyCode());
+        public void actionPerformed(ActionEvent e) {
+            al.actionPerformed(e);
         }
     }
 
     private class DrawPanel extends JPanel {
-        
-        
+
         private Graphics graphics;
         private MouseShapeListener ml;
 
@@ -175,7 +177,7 @@ public class Game {
             this.addMouseListener(ml);
             this.addMouseMotionListener(ml);
         }
-        
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(BOARD_WIDTH, DRAW_HEIGHT);
@@ -184,6 +186,7 @@ public class Game {
         @Override
         public void paintComponent(Graphics g) {
             graphics = g;
+
             for (Location p : ml.accessDragged()) {
                 this.drawShape((int) p.getX(), (int) p.getY());
             }
@@ -192,7 +195,7 @@ public class Game {
         public void drawShape(int x, int y) {
             //graphics = this.getGraphics();
             graphics.setColor(Color.RED);
-            graphics.fillOval(x, y, 10, 10);
+            graphics.fillOval(x, y, 5, 5);
         }
 
         private class MouseShapeListener implements MouseListener, MouseMotionListener {
@@ -210,7 +213,7 @@ public class Game {
                 clicked.clear();
                 return temp;
             }
-            
+
             public HashSet<Location> accessDragged() {
                 HashSet<Location> temp = new HashSet<Location>(clicked);
                 return temp;
@@ -218,15 +221,15 @@ public class Game {
 
             public boolean finishedShape() {
                 if (!stillClicking) {
-                    if (clicked.size() > 10)
+                    if (clicked.size() > 10) {
                         return true;
-                    else {
+                    } else {
                         clicked.clear();
                         return false;
                     }
                 }
                 return false;
-               // return (!stillClicking) && clicked.size() > 10;
+                // return (!stillClicking) && clicked.size() > 10;
             }
 
             @Override
