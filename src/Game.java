@@ -1,3 +1,5 @@
+ 
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -8,60 +10,40 @@ import javax.swing.*;
 public class Game {
 
     private JFrame frame;
-    private JPanel control;
+    private JFrame control;
     private DrawPanel pad;
-    private MPBar mpBar;
-    private JLabel mpLabel;
     private Character main;
 
     private HashSet<Integer> keys;
-    private int time;
 
     public static final int CIRCLE = 0;
     public static final int HOR_LINE = 1;
     public static final int VERT_LINE = 2;
     public static final int SQUARE = 3;
 
-    public static final int SPEED = 1;
-    public static final int REGEN_RATE = 1;
+    private static final int SPEED = 1;
 
     public static final int BOARD_WIDTH = 300;
     public static final int BOARD_HEIGHT = 300;
     //public static final int DRAW_WIDTH = 300;
     public static final int DRAW_HEIGHT = 300;
-    public static final int BAR_HEIGHT = 30;
-    
-    public static final Color MP_BG = new Color(128, 159, 255);
-    public static final Color MP_FILL = new Color(0, 64, 255);
+    public static final int BAR_HEIGHT = 75;
 
     public static void main(String[] args) throws IOException {
         new Game().start();
     }
 
     public Game() throws IOException {
-        time = 0;
-        
         frame = new JFrame();
-        control = new JPanel();
+        control = new JFrame();
         pad = new DrawPanel();
-        
-        mpBar = new MPBar();
-        mpLabel = new JLabel("100/100");
-        mpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
-        mpLabel.setForeground(Color.WHITE);
-        mpBar.add(mpLabel);
-        
-        main = new Character(0, 0, "ball.png", 20, 20);
-        
+
         pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
                 BorderFactory.createLoweredBevelBorder()));
 
-        control.setLayout(new BoxLayout(control, BoxLayout.Y_AXIS));
-        control.add(pad);
-        control.add(mpBar);
-        
         frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT));
-        frame.getContentPane().add(control, BorderLayout.SOUTH);
+        main = new Character(0, 0, "ball.png", 20, 20);
+        frame.getContentPane().add(pad, BorderLayout.SOUTH);
         frame.getContentPane().add(main);
 
         initBindings();
@@ -127,11 +109,6 @@ public class Game {
                     main.fireWeapon("Boomerang");
                 }
             }
-            
-            if (++time % 100 == 0) {
-                time = 0;
-                main.incMP(REGEN_RATE);
-            }
 
             frame.repaint();
         }
@@ -164,17 +141,18 @@ public class Game {
             scores[0] += Math.pow((Math.sqrt(p.getX2() + p.getY2()) - 1), 2) / points.size();
             scores[1] += p.getY2() / points.size();
             scores[2] += p.getX2() / points.size();
-            scores[3] += Math.pow(Math.max(p.getX2(), p.getY2()) - 1, 2) / points.size();
+            scores[3] += Math.pow(Math.max(Math.abs(p.getX()), Math.abs(p.getY())) - .95, 2) / points.size();
         }
         int min = 0;
         for (int i = 0; i < scores.length; i++) {
             if (scores[i] < scores[min]) {
                 min = i;
             }
-            //System.out.println(i+": "+scores[i]);
+            System.out.println(i+": "+scores[i]);
         }
-        //if (min>0.3)
-        //return -1;
+        //System.out.println(min);
+        if (scores[min]>0.05)
+            return -1;
         return min;
     }
 
@@ -189,24 +167,6 @@ public class Game {
         @Override
         public void actionPerformed(ActionEvent e) {
             al.actionPerformed(e);
-        }
-    }
-    
-    
-    private class MPBar extends JPanel {
-        
-        @Override
-        protected void paintComponent(Graphics g) {
-            g.setColor(MP_BG);
-            g.fillRect(0, 0, this.getWidth(), this.getHeight());
-            g.setColor(MP_FILL);
-            g.fillRect(0, 0, (int) (main.getMP() * 1.0 / Character.MAX_MP * this.getWidth()), this.getHeight());
-            mpLabel.setText(main.getMP() + "/" + Character.MAX_MP);
-        }
-        
-        @Override
-        public Dimension getPreferredSize() {
-            return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
         }
     }
 
