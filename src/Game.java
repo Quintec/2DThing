@@ -12,6 +12,8 @@ public class Game {
     private MPBar mpBar;
     private JLabel mpLabel;
     private Character main;
+    
+    private static final int IM = JComponent.WHEN_FOCUSED;
 
     private HashSet<Integer> keys;
     private int time;
@@ -45,7 +47,7 @@ public class Game {
         pad = new DrawPanel();
         
         mpBar = new MPBar();
-        mpLabel = new JLabel("100/100");
+        mpLabel = new JLabel("MP: 100/100");
         mpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
         mpLabel.setForeground(Color.WHITE);
         mpBar.add(mpLabel);
@@ -73,25 +75,25 @@ public class Game {
     private void initBindings() {
         keys = new HashSet<Integer>();
 
-        main.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "left");
-        main.getInputMap().put(KeyStroke.getKeyStroke("UP"), "up");
-        main.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "right");
-        main.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("LEFT"), "left");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("UP"), "up");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("RIGHT"), "right");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("DOWN"), "down");
 
-        main.getInputMap().put(KeyStroke.getKeyStroke("A"), "left");
-        main.getInputMap().put(KeyStroke.getKeyStroke("W"), "up");
-        main.getInputMap().put(KeyStroke.getKeyStroke("D"), "right");
-        main.getInputMap().put(KeyStroke.getKeyStroke("S"), "down");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("A"), "left");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("W"), "up");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("D"), "right");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("S"), "down");
 
-        main.getInputMap().put(KeyStroke.getKeyStroke("released LEFT"), "rleft");
-        main.getInputMap().put(KeyStroke.getKeyStroke("released UP"), "rup");
-        main.getInputMap().put(KeyStroke.getKeyStroke("released RIGHT"), "rright");
-        main.getInputMap().put(KeyStroke.getKeyStroke("released DOWN"), "rdown");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released LEFT"), "rleft");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released UP"), "rup");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released RIGHT"), "rright");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released DOWN"), "rdown");
 
-        main.getInputMap().put(KeyStroke.getKeyStroke("released A"), "rleft");
-        main.getInputMap().put(KeyStroke.getKeyStroke("released W"), "rup");
-        main.getInputMap().put(KeyStroke.getKeyStroke("released D"), "rright");
-        main.getInputMap().put(KeyStroke.getKeyStroke("released S"), "rdown");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released A"), "rleft");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released W"), "rup");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released D"), "rright");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("released S"), "rdown");
 
         main.getActionMap().put("left", new ActionWrapper((e)->keys.add(37)));
         main.getActionMap().put("up", new ActionWrapper((e)->keys.add(38)));
@@ -122,8 +124,11 @@ public class Game {
             
             if (pad.ml.finishedShape()) {
                 int shape = this.getShape(pad.ml.getDragged());
+                System.out.println(shape);
                 if (shape == Game.CIRCLE) {
                     main.fireWeapon("Boomerang");
+                } else if (shape == Game.HOR_LINE) {
+                    main.fireWeapon("Arrow");
                 }
             }
             
@@ -170,7 +175,7 @@ public class Game {
             if (scores[i] < scores[min]) {
                 min = i;
             }
-            System.out.println(i+": "+scores[i]);
+            //System.out.println(i+": "+scores[i]);
         }
         if (scores[min]>0.05)
             return -1;
@@ -200,7 +205,7 @@ public class Game {
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
             g.setColor(MP_FILL);
             g.fillRect(0, 0, (int) (main.getMP() * 1.0 / Character.MAX_MP * this.getWidth()), this.getHeight());
-            mpLabel.setText(main.getMP() + "/" + Character.MAX_MP);
+            mpLabel.setText("MP: " + main.getMP() + "/" + Character.MAX_MP);
         }
         
         @Override

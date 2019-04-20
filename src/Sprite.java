@@ -38,6 +38,16 @@ public class Sprite extends JComponent{
         return y;
     }
     
+    @Override
+    public int getHeight() {
+        return this.height;
+    }
+    
+    @Override
+    public int getWidth() {
+        return this.width;
+    }
+    
     public Image getImage() {
         return img;
     }
