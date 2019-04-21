@@ -28,6 +28,7 @@ public class Game {
 
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
+    public static final int REGEN_TIME = 60;
 
     public static final int BOARD_WIDTH = 300;
     public static final int BOARD_HEIGHT = 300;
@@ -64,7 +65,7 @@ public class Game {
         hpLabel.setForeground(Color.WHITE);
         hpBar.add(hpLabel);
 
-        main = new Character(0, 0, "ball.png", 20, 20);
+        main = new Character(0, 0, CharLoc.BOY);
 
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
 
@@ -114,31 +115,39 @@ public class Game {
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("released D"), "rright");
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("released S"), "rdown");
 
-        main.getActionMap().put("left", new ActionWrapper((e)->keys.add(37)));
-        main.getActionMap().put("up", new ActionWrapper((e)->keys.add(38)));
-        main.getActionMap().put("right", new ActionWrapper((e)->keys.add(39)));
-        main.getActionMap().put("down", new ActionWrapper((e)->keys.add(40)));
+        main.getActionMap().put("left", new ActionWrapper((e)->keys.add(Character.LEFT)));
+        main.getActionMap().put("up", new ActionWrapper((e)->keys.add(Character.UP)));
+        main.getActionMap().put("right", new ActionWrapper((e)->keys.add(Character.RIGHT)));
+        main.getActionMap().put("down", new ActionWrapper((e)->keys.add(Character.DOWN)));
 
-        main.getActionMap().put("rleft", new ActionWrapper((e)->keys.remove(37)));
-        main.getActionMap().put("rup", new ActionWrapper((e)->keys.remove(38)));
-        main.getActionMap().put("rright", new ActionWrapper((e)->keys.remove(39)));
-        main.getActionMap().put("rdown", new ActionWrapper((e)->keys.remove(40)));
+        main.getActionMap().put("rleft", new ActionWrapper((e)->keys.remove(Character.LEFT)));
+        main.getActionMap().put("rup", new ActionWrapper((e)->keys.remove(Character.UP)));
+        main.getActionMap().put("rright", new ActionWrapper((e)->keys.remove(Character.RIGHT)));
+        main.getActionMap().put("rdown", new ActionWrapper((e)->keys.remove(Character.DOWN)));
     }
 
     public void start() {
         while (true) {
             try {Thread.sleep(10);} catch (InterruptedException ex) {}
-            if (keys.contains(37) || keys.contains(65)) {//left
+            if (keys.contains(Character.LEFT)) {
                 main.incX(-SPEED);
+                if (!keys.contains(main.getDir()))
+                    main.setDir(Character.LEFT);
             }
-            if (keys.contains(38) || keys.contains(87)) {//up
+            if (keys.contains(Character.UP)) {
                 main.incY(-SPEED);
+                if (!keys.contains(main.getDir()))
+                    main.setDir(Character.UP);
             }
-            if (keys.contains(39) || keys.contains(68)) {//right
+            if (keys.contains(Character.RIGHT)) {
                 main.incX(SPEED);
+                if (!keys.contains(main.getDir()))
+                    main.setDir(Character.RIGHT);
             }
-            if (keys.contains(40) || keys.contains(83)) {//down
+            if (keys.contains(Character.DOWN)) {
                 main.incY(SPEED);
+                if (!keys.contains(main.getDir()))
+                    main.setDir(Character.DOWN);
             }
 
             if (pad.ml.finishedShape()) {
@@ -151,10 +160,15 @@ public class Game {
                 }
             }
 
-            if (++time % 100 == 0) {
+            if (++time % REGEN_TIME == 0) {
                 time = 0;
                 main.incMP(REGEN_RATE);
             }
+            
+            if (time % 10 == 0)
+                main.toggle();
+            
+            main.setStill(keys.isEmpty());
 
             frame.repaint();
         }

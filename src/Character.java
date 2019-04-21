@@ -1,19 +1,62 @@
 import java.awt.*;
+import java.awt.image.*;
 import java.lang.reflect.*;
+import java.io.*;
+import javax.imageio.ImageIO;
 
 
 public class Character extends Sprite {
     
+    public static final int CHAR_SIZE = 32;
+    
     public static final int MAX_MP = 100;
     public static final int MAX_HP = 100;
+    
+    public static final int DOWN = 0;
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
+    public static final int UP = 3;
         
+    private int dir;
+    private boolean still;
+    private int toggle;
+    
     private int mp;
     private int hp;
     
-    public Character(int xc, int yc, String path, int w, int h) {
-        super(xc, yc, path, w, h);
+    private CharLoc loc;
+    
+    private static BufferedImage spriteSheet;
+    
+    static {
+        try {
+            spriteSheet = ImageIO.read(new File("SpriteSheetAll32.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load spritesheet at SpriteSheetAll32.png"); 
+        }
+    }
+    
+    public Character(int xc, int yc, CharLoc cl) {
+        super(xc, yc, null, 32, 32);
+        this.dir = RIGHT;
+        this.still = true;
+        this.toggle = 0;
+        
         this.mp = MAX_MP;
         this.hp = MAX_HP;
+        
+        this.loc = cl;
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        if (still) {
+            this.img = spriteSheet.getSubimage(CHAR_SIZE * loc.getX(), CHAR_SIZE * (loc.getY() + dir), CHAR_SIZE, CHAR_SIZE);
+        } else {
+            this.img = spriteSheet.getSubimage(CHAR_SIZE * (loc.getX() + 1 + toggle), CHAR_SIZE * (loc.getY() + dir), CHAR_SIZE, CHAR_SIZE);
+        }
+        
+        super.paintComponent(g);
     }
         
     public void fireWeapon(String name) {//TODO: Specify direction
@@ -25,14 +68,32 @@ public class Character extends Sprite {
                 w.execute();
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error loading weapon: " + e.getMessage());
         }
         /*Boomerang b = new Boomerang(this, x, y, 0, this.getParent());
         if (b.activate())
             b.execute();*/
     }
     
+    public void toggle() {
+        toggle = 1 - toggle;
+    }
     
+    public int getDir() {
+        return dir;
+    }
+    
+    public void setDir(int d) {
+        dir = d;
+    }
+    
+    public boolean isStill() {
+        return still;
+    }
+    
+    public void setStill(boolean b) {
+        still = b;
+    }
         
     public int getMP() {
         return mp;

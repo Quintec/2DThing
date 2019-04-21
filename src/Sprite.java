@@ -21,10 +21,12 @@ public class Sprite extends JComponent{
         this.width = w;
         this.height = h;
         
-        try {
-            this.img = ImageIO.read(new File(path)).getScaledInstance(this.width, this.height, Image.SCALE_DEFAULT);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+        if (path != null) {
+            try {
+                this.img = ImageIO.read(new File(path)).getScaledInstance(this.width, this.height, Image.SCALE_DEFAULT);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
         }
         
         this.setLocation(0, 0);
