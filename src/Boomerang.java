@@ -4,7 +4,7 @@ import javax.swing.*;
 public class Boomerang extends Weapon {
 
     public Boomerang(Character s, int d, Container jc) {
-        super("Boomerang", 10, s, d, jc, 20, 20);
+        super("Boomerang", 10, s, d, jc, 32, 32);
     }
 
     @Override
@@ -13,7 +13,7 @@ public class Boomerang extends Weapon {
             if (i == 0)
                 this.init();
             else {
-                this.wep.x += 2;
+                this.wep.x += 3;
                 if (i % 10 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png");
@@ -30,7 +30,7 @@ public class Boomerang extends Weapon {
         this.parent.repaint();
 
         for (int i = 0; i < 50; i++) {
-            this.wep.x -= 2;
+            this.wep.x -= 3;
             if (i % 10 == 0) {
                 this.stage++;
                 this.wep.setImage(this.type + this.stage + ".png");

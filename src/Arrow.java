@@ -3,7 +3,7 @@ import javax.swing.*;
 public class Arrow extends Weapon {
 
     public Arrow(Character s, int d, Container jc) {
-        super("Arrow", 10, s, d, jc, 40, 20);
+        super("Arrow", 10, s, d, jc, 32, 32);
     }
 
    @Override
