@@ -25,12 +25,6 @@ public class Arrow extends Weapon {
         
         return null;
     }
-    
-    @Override
-    public void init() {
-        this.wep = new Sprite(this.user.getX(), this.user.getY() - this.user.getHeight() / 2, type + stage + ".png", width, height);
-        this.parent.add(wep);
-    }
 
     @Override
     protected void done() {
