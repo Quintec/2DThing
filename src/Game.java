@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.*;
 
 public class Game {
 
@@ -65,15 +66,21 @@ public class Game {
 
         main = new Character(0, 0, "ball.png", 20, 20);
 
-        pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
-                BorderFactory.createLoweredBevelBorder()));
+        Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
+
+        TitledBorder tb = BorderFactory.createTitledBorder(b, "D-Pad");
+        tb.setTitleJustification(TitledBorder.CENTER);
+        tb.setTitleFont(new Font("Courier New", Font.BOLD, 16));
+        pad.setBorder(tb);
+       // pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
+        //        BorderFactory.createLoweredBevelBorder()));
 
         control.setLayout(new BoxLayout(control, BoxLayout.Y_AXIS));
         control.add(pad);
         control.add(mpBar);
         control.add(hpBar);
 
-        frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT));
+        frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT + 15));
         frame.getContentPane().add(control, BorderLayout.SOUTH);
         frame.getContentPane().add(main);
 
@@ -242,8 +249,7 @@ public class Game {
     }
 
     private class DrawPanel extends JPanel {
-
-        private Graphics graphics;
+        
         private MouseShapeListener ml;
 
         public DrawPanel() {
@@ -260,22 +266,20 @@ public class Game {
         @Override
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
+            g2.setBackground(Color.WHITE);
+            g2.clearRect(0, 0, this.getWidth(), this.getHeight());
+            
             g2.setStroke(new BasicStroke(5));  
+            g2.setColor(new Color(100, 100, 100));
             ArrayList<Location> points = ml.accessDragged();
             if (points.size()>0)
             {
                 Location prev = points.get(0);
                 for (Location p : points) {
-                    g.drawLine((int) p.getX(), (int) p.getY(), (int) prev.getX(), (int) prev.getY());
+                    g2.drawLine((int) p.getX(), (int) p.getY(), (int) prev.getX(), (int) prev.getY());
                     prev = p;
                 }
             }
-        }
-
-        public void drawShape(int x, int y) {
-            //graphics = this.getGraphics();
-            graphics.setColor(Color.RED);
-            graphics.fillOval(x, y, 5, 5);
         }
 
         private class MouseShapeListener implements MouseListener, MouseMotionListener {
