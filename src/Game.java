@@ -14,7 +14,7 @@ public class Game {
     private JLabel mpLabel;
     private JLabel hpLabel;
     private Character main;
-    
+
     private static final int IM = JComponent.WHEN_FOCUSED;
 
     private HashSet<Integer> keys;
@@ -33,10 +33,10 @@ public class Game {
     //public static final int DRAW_WIDTH = 300;
     public static final int DRAW_HEIGHT = 300;
     public static final int BAR_HEIGHT = 30;
-    
+
     public static final Color MP_BG = new Color(128, 159, 255);
     public static final Color MP_FILL = new Color(0, 64, 255);
-    
+
     public static final Color HP_BG = new Color(255, 128, 128);
     public static final Color HP_FILL = new Color(255, 0, 0);
 
@@ -46,25 +46,25 @@ public class Game {
 
     public Game() throws IOException {
         time = 0;
-        
+
         frame = new JFrame();
         control = new JPanel();
         pad = new DrawPanel();
-        
+
         mpBar = new MPBar();
         mpLabel = new JLabel("MP: " + Character.MAX_MP + "/" + Character.MAX_MP);
         mpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
         mpLabel.setForeground(Color.WHITE);
         mpBar.add(mpLabel);
-        
+
         hpBar = new HPBar();
         hpLabel = new JLabel("HP: " + Character.MAX_HP + "/" + Character.MAX_HP);
         hpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
         hpLabel.setForeground(Color.WHITE);
         hpBar.add(hpLabel);
-        
+
         main = new Character(0, 0, "ball.png", 20, 20);
-        
+
         pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
                 BorderFactory.createLoweredBevelBorder()));
 
@@ -72,7 +72,7 @@ public class Game {
         control.add(pad);
         control.add(mpBar);
         control.add(hpBar);
-        
+
         frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT));
         frame.getContentPane().add(control, BorderLayout.SOUTH);
         frame.getContentPane().add(main);
@@ -133,7 +133,7 @@ public class Game {
             if (keys.contains(40) || keys.contains(83)) {//down
                 main.incY(SPEED);
             }
-            
+
             if (pad.ml.finishedShape()) {
                 int shape = this.getShape(pad.ml.getDragged());
                 //System.out.println(shape);
@@ -143,7 +143,7 @@ public class Game {
                     main.fireWeapon("Arrow");
                 }
             }
-            
+
             if (++time % 100 == 0) {
                 time = 0;
                 main.incMP(REGEN_RATE);
@@ -153,7 +153,7 @@ public class Game {
         }
     }
 
-    public int getShape(HashSet<Location> points) {
+    public int getShape(ArrayList<Location> points) {
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
@@ -207,10 +207,8 @@ public class Game {
             al.actionPerformed(e);
         }
     }
-    
-    
+
     private class MPBar extends JPanel {
-        
         @Override
         protected void paintComponent(Graphics g) {
             g.setColor(MP_BG);
@@ -219,15 +217,15 @@ public class Game {
             g.fillRect(0, 0, (int) (main.getMP() * 1.0 / Character.MAX_MP * this.getWidth()), this.getHeight());
             mpLabel.setText("MP: " + main.getMP() + "/" + Character.MAX_MP);
         }
-        
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
         }
     }
-    
+
     private class HPBar extends JPanel {
-        
+
         @Override
         protected void paintComponent(Graphics g) {
             g.setColor(HP_BG);
@@ -236,7 +234,7 @@ public class Game {
             g.fillRect(0, 0, (int) (main.getHP() * 1.0 / Character.MAX_HP * this.getWidth()), this.getHeight());
             mpLabel.setText("MP: " + main.getHP() + "/" + Character.MAX_HP);
         }
-        
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
@@ -261,10 +259,16 @@ public class Game {
 
         @Override
         public void paintComponent(Graphics g) {
-            graphics = g;
-
-            for (Location p : ml.accessDragged()) {
-                this.drawShape((int) p.getX(), (int) p.getY());
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(5));  
+            ArrayList<Location> points = ml.accessDragged();
+            if (points.size()>0)
+            {
+                Location prev = points.get(0);
+                for (Location p : points) {
+                    g.drawLine((int) p.getX(), (int) p.getY(), (int) prev.getX(), (int) prev.getY());
+                    prev = p;
+                }
             }
         }
 
@@ -276,22 +280,22 @@ public class Game {
 
         private class MouseShapeListener implements MouseListener, MouseMotionListener {
 
-            private HashSet<Location> clicked;
+            private ArrayList<Location> clicked;
             private boolean stillClicking;
 
             public MouseShapeListener() {
-                clicked = new HashSet<Location>();
+                clicked = new ArrayList<Location>();
                 stillClicking = false;
             }
 
-            public HashSet<Location> getDragged() {
-                HashSet<Location> temp = new HashSet<Location>(clicked);
+            public ArrayList<Location> getDragged() {
+                ArrayList<Location> temp = new ArrayList<Location>(clicked);
                 clicked.clear();
                 return temp;
             }
 
-            public HashSet<Location> accessDragged() {
-                HashSet<Location> temp = new HashSet<Location>(clicked);
+            public ArrayList<Location> accessDragged() {
+                ArrayList<Location> temp = new ArrayList<Location>(clicked);
                 return temp;
             }
 
