@@ -7,7 +7,6 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
-.DS_Store
 
 # Class Files #
 *.class
