@@ -8,12 +8,12 @@ public class Arrow extends Weapon {
 
    @Override
     protected Object doInBackground() throws Exception {//TODO: Obey directions
-        for (int i = 0; i < 50; i++) {
-            if (i == 0)
+        for (int i = 1; i < 54; i++) {
+            if (i == 1)
                 this.init();
             else {
                 this.wep.x += 3;
-                if (i % 10 == 0) {
+                if (i % 9 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png");
                 }
