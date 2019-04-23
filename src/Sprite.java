@@ -1,10 +1,13 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 import java.lang.reflect.*;
 
 public class Sprite extends JComponent{
+    
+    public static final int SPRITE_SIZE = 32;
     
     protected int x;
     protected int y;
@@ -13,6 +16,24 @@ public class Sprite extends JComponent{
     protected int height;
     
     protected Image img;
+    
+    protected static BufferedImage spriteSheet;
+    
+    static {
+        try {
+            spriteSheet = ImageIO.read(new File("SpriteSheetAll32.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load spritesheet at SpriteSheetAll32.png"); 
+        }
+    }
+    
+    public Sprite(int xc, int yc, String path) {
+        this(xc, yc, path, SPRITE_SIZE, SPRITE_SIZE);
+    }
+    
+    public Sprite(int xc, int yc, SpriteLoc sl) {
+        this(xc, yc, sl, SPRITE_SIZE, SPRITE_SIZE);
+    }
     
     public Sprite(int xc, int yc, String path, int w, int h) {
         this.x = xc;
@@ -30,6 +51,16 @@ public class Sprite extends JComponent{
         }
         
         this.setLocation(0, 0);
+    }
+    
+    public Sprite(int xc, int yc, SpriteLoc sl, int w, int h) {
+        this.x = xc;
+        this.y = yc;
+        
+        this.width = w;
+        this.height = h;
+        
+        this.img = spriteSheet.getSubimage(sl.getX() * SPRITE_SIZE, sl.getY() * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
     }
     
     public int getX() {

@@ -65,7 +65,7 @@ public class Game {
         hpLabel.setForeground(Color.WHITE);
         hpBar.add(hpLabel);
 
-        main = new Character(0, 0, CharLoc.BOY);
+        main = new Character(0, 0, SpriteLoc.BOY);
 
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
 

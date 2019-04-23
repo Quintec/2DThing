@@ -2,8 +2,12 @@ import java.io.*;
 
 public class BasicEnemy extends Enemy {
 
-    public BasicEnemy(int xc, int yc, String path, Character main, int w, int h) throws IOException {
-        super(xc, yc, path, main, w, h);
+    public BasicEnemy(int xc, int yc, String path, Character main) {
+        super(xc, yc, path, main);
+    }
+    
+    public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main) {
+        super(xc, yc, sl, main);
     }
 
     @Override

@@ -7,8 +7,6 @@ import javax.imageio.ImageIO;
 
 public class Character extends Sprite {
     
-    public static final int CHAR_SIZE = 32;
-    
     public static final int MAX_MP = 100;
     public static final int MAX_HP = 100;
     
@@ -24,20 +22,11 @@ public class Character extends Sprite {
     private int mp;
     private int hp;
     
-    private CharLoc loc;
+    private SpriteLoc loc;
+
     
-    private static BufferedImage spriteSheet;
-    
-    static {
-        try {
-            spriteSheet = ImageIO.read(new File("SpriteSheetAll32.png"));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load spritesheet at SpriteSheetAll32.png"); 
-        }
-    }
-    
-    public Character(int xc, int yc, CharLoc cl) {
-        super(xc, yc, null, 32, 32);
+    public Character(int xc, int yc, SpriteLoc cl) {
+        super(xc, yc, cl, SPRITE_SIZE, SPRITE_SIZE);
         this.dir = RIGHT;
         this.still = true;
         this.toggle = 0;
@@ -51,9 +40,9 @@ public class Character extends Sprite {
     @Override
     protected void paintComponent(Graphics g) {
         if (still) {
-            this.img = spriteSheet.getSubimage(CHAR_SIZE * loc.getX(), CHAR_SIZE * (loc.getY() + dir), CHAR_SIZE, CHAR_SIZE);
+            this.img = spriteSheet.getSubimage(SPRITE_SIZE * loc.getX(), SPRITE_SIZE * (loc.getY() + dir), SPRITE_SIZE, SPRITE_SIZE);
         } else {
-            this.img = spriteSheet.getSubimage(CHAR_SIZE * (loc.getX() + 1 + toggle), CHAR_SIZE * (loc.getY() + dir), CHAR_SIZE, CHAR_SIZE);
+            this.img = spriteSheet.getSubimage(SPRITE_SIZE * (loc.getX() + 1 + toggle), SPRITE_SIZE * (loc.getY() + dir), SPRITE_SIZE, SPRITE_SIZE);
         }
         
         super.paintComponent(g);
