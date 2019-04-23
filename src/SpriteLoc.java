@@ -1,4 +1,3 @@
-
 public enum SpriteLoc {
     BOY(0, 8), GIRL(3, 8), SKELETON(6, 8),
     OOZE(0, 12), BAT(3, 12), GHOST(6, 12), SPIDER(9, 12);

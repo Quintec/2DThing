@@ -1,5 +1,4 @@
 import java.awt.Container;
-import javax.swing.*;
 public class Arrow extends Weapon {
 
     public Arrow(Character s, int d, Container jc) {

@@ -1,9 +1,5 @@
 import java.awt.*;
-import java.awt.image.*;
 import java.lang.reflect.*;
-import java.io.*;
-import javax.imageio.ImageIO;
-
 
 public class Character extends Sprite {
     

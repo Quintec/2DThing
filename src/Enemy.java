@@ -1,6 +1,3 @@
-
-import java.io.IOException;
-
 public abstract class Enemy extends Sprite {
     
     private Character target;

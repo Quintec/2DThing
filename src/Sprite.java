@@ -3,7 +3,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
-import java.lang.reflect.*;
 
 public class Sprite extends JComponent{
     

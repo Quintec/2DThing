@@ -165,7 +165,7 @@ public class Game {
                 main.incMP(REGEN_RATE);
             }
             
-            if (time % 10 == 0)
+            if (time % 12 == 0)
                 main.toggle();
             
             main.setStill(keys.isEmpty());
