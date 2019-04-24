@@ -21,10 +21,13 @@ public class Game {
     private HashSet<Integer> keys;
     private int time;
 
+    public static final int NUM_SHAPES = 6;
     public static final int CIRCLE = 0;
-    public static final int HOR_LINE = 1;
-    public static final int VERT_LINE = 2;
-    public static final int SQUARE = 3;
+    public static final int SQUARE = 1;
+    public static final int LEFT_LINE = 2;
+    public static final int RIGHT_LINE = 3;
+    public static final int DOWN_LINE = 4;
+    public static final int UP_LINE = 5;
 
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
@@ -155,7 +158,7 @@ public class Game {
                 //System.out.println(shape);
                 if (shape == Game.CIRCLE) {
                     main.fireWeapon("Boomerang");
-                } else if (shape == Game.HOR_LINE) {
+                } else if (shape == Game.RIGHT_LINE) {
                     main.fireWeapon("Arrow");
                 }
             }
@@ -194,14 +197,16 @@ public class Game {
             p.dilate(1 / Math.max(maxX, maxY), 1 / Math.max(maxX, maxY));
         }
 
-        double[] scores = new double[4];
+        double[] scores = new double[Game.NUM_SHAPES];
         for (Location p : points) {
             // System.out.println(p.getX() + ", " + p.getY());
             //System.out.println(Math.pow((Math.sqrt(p.getX2()+p.getY2())-1),2)/points.size());
-            scores[0] += Math.pow((Math.sqrt(p.getX2() + p.getY2()) - 1), 2) / points.size();
-            scores[1] += p.getY2() / points.size();
-            scores[2] += p.getX2() / points.size();
-            scores[3] += Math.pow(Math.max(Math.abs(p.getX()), Math.abs(p.getY())) - .95, 2) / points.size();
+            scores[CIRCLE] += Math.pow((Math.sqrt(p.getX2() + p.getY2()) - 0.95), 2) / points.size();
+            scores[LEFT_LINE] += p.getY2() / points.size();
+            scores[DOWN_LINE] += p.getX2() / points.size();
+            scores[RIGHT_LINE] += p.getY2() / points.size();
+            scores[UP_LINE] += p.getX2() / points.size();
+            scores[SQUARE] += Math.pow(Math.max(Math.abs(p.getX()), Math.abs(p.getY())) - .95, 2) / points.size();
         }
         int min = 0;
         for (int i = 0; i < scores.length; i++) {
@@ -212,6 +217,19 @@ public class Game {
         }
         if (scores[min]>0.05)
             return -1;
+        if (min==LEFT_LINE)
+        {
+          if (points.get(0).getX()>points.get(points.size()-1).getX())
+            return LEFT_LINE;
+          return RIGHT_LINE;
+        }
+        if (min==DOWN_LINE)
+        {
+          if (points.get(0).getY()>points.get(points.size()-1).getY())
+            return UP_LINE;
+          return DOWN_LINE;
+        }
+        //System.out.println(min);
         return min;
     }
 
@@ -300,7 +318,7 @@ public class Game {
 
             private ArrayList<Location> clicked;
             private boolean stillClicking;
-
+            
             public MouseShapeListener() {
                 clicked = new ArrayList<Location>();
                 stillClicking = false;
