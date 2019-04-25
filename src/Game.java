@@ -36,16 +36,11 @@ public class Game {
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
     public static final int REGEN_TIME = 60;
-<<<<<<< HEAD
 
     public static int BOARD_WIDTH = 320;
     public static int BOARD_HEIGHT = 320;
-=======
-    public static final int COMBO_TIME = 90;
     
-    public static final int BOARD_WIDTH = 300;
-    public static final int BOARD_HEIGHT = 300;
->>>>>>> 1b39476f9de840b0039279461ef458def816b5d9
+    public static final int COMBO_TIME = 90;
     //public static final int DRAW_WIDTH = 300;
     public static final int DRAW_HEIGHT = 300;
     public static final int BAR_HEIGHT = 30;
@@ -68,8 +63,35 @@ public class Game {
         
         BufferedReader in = new BufferedReader(new FileReader("map.txt"));
         StringTokenizer st = new StringTokenizer(in.readLine());
-        BOARD_WIDTH = Integer.parseInt(st.nextToken());
-        BOARD_HEIGHT = Integer.parseInt(st.nextToken());
+        int w = Integer.parseInt(st.nextToken());
+        int h = Integer.parseInt(st.nextToken());
+        
+        BOARD_WIDTH = w * 32;
+        BOARD_HEIGHT = h * 32;
+        
+        map = new SpriteLoc[w][h];
+        
+        for (int i = 0; i < w; i++) {
+            char[] line = in.readLine().toCharArray();
+            for (int j = 0; j < h; j++) {
+                switch (line[j]) {
+                    case '+':
+                        map[j][i] = SpriteLoc.WALL_CORNER_TOP;
+                        break;
+                    case 't':
+                        map[j][i] = SpriteLoc.WALL_CORNER_BOTTOM;
+                        break;
+                    case '-':
+                        map[j][i] = SpriteLoc.WALL_HORIZONTAL;
+                        break;
+                    case '|':
+                        map[j][i] = SpriteLoc.WALL_VERTICAL;
+                        break;
+                    default:
+                        map[j][i] = SpriteLoc.FLOOR;
+                }
+            }
+        }
         
         new Game().start();
     }
@@ -115,7 +137,7 @@ public class Game {
         control.add(mpBar);
         control.add(hpBar);
 
-        frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT + 15));
+        frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT + 15 + 12));
         frame.getContentPane().add(control, BorderLayout.SOUTH);
         frame.getContentPane().add(mapPanel, BorderLayout.NORTH);
         //frame.getContentPane().add(main);
@@ -342,7 +364,7 @@ public class Game {
         
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
+            return new Dimension(BOARD_WIDTH, BOARD_HEIGHT + 12);
         }
     }
 
