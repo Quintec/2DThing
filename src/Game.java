@@ -51,7 +51,7 @@ public class Game {
     public static final Color HP_BG = new Color(255, 128, 128);
     public static final Color HP_FILL = new Color(255, 0, 0);
     
-    private static SpriteLoc[][] map;
+    public static SpriteLoc[][] map;
 
     public static void main(String[] args) throws IOException {
         /*map = new SpriteLoc[BOARD_HEIGHT / 32][BOARD_WIDTH / 32];
@@ -119,7 +119,7 @@ public class Game {
         hpLabel.setForeground(Color.WHITE);
         hpBar.add(hpLabel);
 
-        main = new Character(0, 0, SpriteLoc.BOY);
+        main = new Character(64, 64, SpriteLoc.BOY);
         
         mapPanel.add(main);
 

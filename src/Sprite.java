@@ -105,25 +105,24 @@ public class Sprite extends JComponent{
     }
     
     public void setX(int ax) {
-        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width)
-            x = ax;
+        incX(ax - x);
     }
     
     public void setY(int ay) {
-        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height)
-            y = ay;
+        incY(ay - y);
     }
     
     public void incX(int nx) {
         int ax = x + nx;
         //System.out.println(ax);
-        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width)
+        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (Game.map[ax/SPRITE_SIZE][y/SPRITE_SIZE] == SpriteLoc.FLOOR) && (Game.map[ax/SPRITE_SIZE + 1][y/SPRITE_SIZE] == SpriteLoc.FLOOR))
             x += nx;
     }
     
     public void incY(int ny) {
         int ay = y + ny;
-        if (0 <= ay && ay <= Game.BOARD_HEIGHT - 2 * this.height)
+        //System.out.println(ay);
+        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (Game.map[x/SPRITE_SIZE][ay/SPRITE_SIZE] == SpriteLoc.FLOOR) && (Game.map[x/SPRITE_SIZE][ay/SPRITE_SIZE + 1] == SpriteLoc.FLOOR))
             y += ny;
     }
     
