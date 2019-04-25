@@ -20,7 +20,10 @@ public class Game {
 
     private HashSet<Integer> keys;
     private int time;
-
+    private int shape;
+    private int comboTime;
+    private boolean drawingSecond;
+    
     public static final int NUM_SHAPES = 6;
     public static final int CIRCLE = 0;
     public static final int SQUARE = 1;
@@ -32,7 +35,8 @@ public class Game {
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
     public static final int REGEN_TIME = 60;
-
+    public static final int COMBO_TIME = 90;
+    
     public static final int BOARD_WIDTH = 300;
     public static final int BOARD_HEIGHT = 300;
     //public static final int DRAW_WIDTH = 300;
@@ -51,7 +55,10 @@ public class Game {
 
     public Game() throws IOException {
         time = 0;
-
+        shape = -1;
+        comboTime = 0;
+        drawingSecond = false;
+        
         frame = new JFrame();
         control = new JPanel();
         pad = new DrawPanel();
@@ -153,16 +160,46 @@ public class Game {
                     main.setDir(Character.DOWN);
             }
 
-            if (pad.ml.finishedShape()) {
-                int shape = this.getShape(pad.ml.getDragged());
-                //System.out.println(shape);
+            if (!drawingSecond&&pad.ml.finishedShape()) {
+                shape = this.getShape(pad.ml.getDragged());
+                System.out.println(shape);
                 if (shape == Game.CIRCLE) {
                     main.fireWeapon("Boomerang");
                 } else if (shape == Game.RIGHT_LINE) {
                     main.fireWeapon("Arrow");
+                    comboTime = COMBO_TIME;
                 }
             }
 
+            if (comboTime>0)
+            {
+              comboTime--;
+              if (pad.ml.isClicking())
+              {
+                drawingSecond = true;
+              }
+            }
+            else
+            {
+              drawingSecond = false;
+            }
+            
+            if (drawingSecond&&pad.ml.finishedShape())
+            {
+              int shape2 = this.getShape(pad.ml.getDragged());
+              if (shape2==CIRCLE)
+                main.fireWeapon("Arrow");
+              else if (shape2==SQUARE)
+                main.fireWeapon("Arrow");
+              else
+              {
+                //fire projectile that shape2 normally represents
+              }
+                
+              comboTime = 0;
+              drawingSecond = false;
+            }
+            
             if (++time % REGEN_TIME == 0) {
                 time = 0;
                 main.incMP(REGEN_RATE);
@@ -346,6 +383,10 @@ public class Game {
                 }
                 return false;
                 // return (!stillClicking) && clicked.size() > 10;
+            }
+            
+            public boolean isClicking() {
+              return stillClicking;
             }
 
             @Override
