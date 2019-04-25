@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -8,6 +8,7 @@ import javax.swing.border.*;
 public class Game {
 
     private JFrame frame;
+    private Map mapPanel;
     private JPanel control;
     private DrawPanel pad;
     private MPBar mpBar;
@@ -33,8 +34,8 @@ public class Game {
     public static final int REGEN_RATE = 1;
     public static final int REGEN_TIME = 60;
 
-    public static final int BOARD_WIDTH = 300;
-    public static final int BOARD_HEIGHT = 300;
+    public static int BOARD_WIDTH = 320;
+    public static int BOARD_HEIGHT = 320;
     //public static final int DRAW_WIDTH = 300;
     public static final int DRAW_HEIGHT = 300;
     public static final int BAR_HEIGHT = 30;
@@ -44,8 +45,22 @@ public class Game {
 
     public static final Color HP_BG = new Color(255, 128, 128);
     public static final Color HP_FILL = new Color(255, 0, 0);
+    
+    private static SpriteLoc[][] map;
 
     public static void main(String[] args) throws IOException {
+        /*map = new SpriteLoc[BOARD_HEIGHT / 32][BOARD_WIDTH / 32];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j] = SpriteLoc.FLOOR;
+            }
+        }*/
+        
+        BufferedReader in = new BufferedReader(new FileReader("map.txt"));
+        StringTokenizer st = new StringTokenizer(in.readLine());
+        BOARD_WIDTH = Integer.parseInt(st.nextToken());
+        BOARD_HEIGHT = Integer.parseInt(st.nextToken());
+        
         new Game().start();
     }
 
@@ -53,6 +68,7 @@ public class Game {
         time = 0;
 
         frame = new JFrame();
+        mapPanel = new Map();
         control = new JPanel();
         pad = new DrawPanel();
 
@@ -69,6 +85,8 @@ public class Game {
         hpBar.add(hpLabel);
 
         main = new Character(0, 0, SpriteLoc.BOY);
+        
+        mapPanel.add(main);
 
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
 
@@ -86,7 +104,9 @@ public class Game {
 
         frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT + 15));
         frame.getContentPane().add(control, BorderLayout.SOUTH);
-        frame.getContentPane().add(main);
+        frame.getContentPane().add(mapPanel, BorderLayout.NORTH);
+        //frame.getContentPane().add(main);
+        
 
         initBindings();
 
@@ -262,6 +282,26 @@ public class Game {
             return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
         }
     }
+    
+    private class Map extends JPanel {
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[0].length; j++) {
+                    Image curr = Sprite.getImageAt(map[i][j]);
+                    g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                   // System.out.println("drawn " + i + ", " + j);
+                }
+            }
+        }
+        
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
+        }
+    }
 
     private class HPBar extends JPanel {
 
@@ -337,7 +377,7 @@ public class Game {
 
             public boolean finishedShape() {
                 if (!stillClicking) {
-                    if (clicked.size() > 10) {
+                    if (clicked.size() > 3) {
                         return true;
                     } else {
                         clicked.clear();
