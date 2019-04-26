@@ -71,9 +71,9 @@ public class Game {
         
         map = new SpriteLoc[w][h];
         
-        for (int i = 0; i < w; i++) {
+        for (int i = 0; i < h; i++) {
             char[] line = in.readLine().toCharArray();
-            for (int j = 0; j < h; j++) {
+            for (int j = 0; j < w; j++) {
                 switch (line[j]) {
                     case '+':
                         map[j][i] = SpriteLoc.WALL_CORNER_TOP;
