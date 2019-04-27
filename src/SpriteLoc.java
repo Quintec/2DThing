@@ -2,7 +2,7 @@ public enum SpriteLoc {
     BOY(0, 8), GIRL(3, 8), SKELETON(6, 8),
     OOZE(0, 12), BAT(3, 12), GHOST(6, 12), SPIDER(9, 12),
     
-    FLOOR(8, 6), 
+    FLOOR(8, 6), DOOR(4, 1),
     WALL_HORIZONTAL(8, 0), WALL_VERTICAL(9, 0), WALL_CORNER_BOTTOM(10, 0), WALL_CORNER_TOP(11, 0);
     
     private int x;

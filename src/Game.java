@@ -87,6 +87,9 @@ public class Game {
                     case '|':
                         map[j][i] = SpriteLoc.WALL_VERTICAL;
                         break;
+                    case 'd':
+                        map[j][i] = SpriteLoc.DOOR;
+                        break;
                     default:
                         map[j][i] = SpriteLoc.FLOOR;
                 }
