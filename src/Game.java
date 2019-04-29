@@ -226,7 +226,19 @@ public class Game {
                 if (shape == Game.CIRCLE) {
                     main.fireWeapon("Boomerang");
                 } else if (shape == Game.RIGHT_LINE) {
-                    main.fireWeapon("Arrow");
+                    main.fireWeapon("Arrow",2);
+                    comboTime = COMBO_TIME;
+                }
+                else if (shape == Game.LEFT_LINE) {
+                    main.fireWeapon("Arrow",1);
+                    comboTime = COMBO_TIME;
+                }
+                else if (shape == Game.DOWN_LINE) {
+                    main.fireWeapon("Arrow",0);
+                    comboTime = COMBO_TIME;
+                }
+                else if (shape == Game.UP_LINE) {
+                    main.fireWeapon("Arrow",3);
                     comboTime = COMBO_TIME;
                 }
             }

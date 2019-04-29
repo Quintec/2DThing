@@ -60,6 +60,22 @@ public class Character extends Sprite {
             b.execute();*/
     }
     
+    public void fireWeapon(String name, int d) {
+        try {
+            Class<?> cl = Class.forName(name);
+            Constructor<?> c = cl.getConstructor(new Class[]{Character.class, int.class, Container.class});
+            Weapon w = (Weapon)c.newInstance(this, d, this.getParent());
+            if (w.activate())
+                w.execute();
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
+                | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            throw new RuntimeException("Error loading weapon: " + e.getMessage());
+        }
+        /*Boomerang b = new Boomerang(this, x, y, 0, this.getParent());
+        if (b.activate())
+            b.execute();*/
+    }
+    
     public void toggle() {
         toggle = 1 - toggle;
     }
