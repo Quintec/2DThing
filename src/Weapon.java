@@ -12,7 +12,7 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     protected int width;
     protected int height;
     
-    protected int dir;
+    protected int dir;//down: 0, left: 1, right: 2, up: 3
     
     protected Container parent;
         
