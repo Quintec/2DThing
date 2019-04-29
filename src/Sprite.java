@@ -1,12 +1,16 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.*;
+import java.util.List;
 import javax.imageio.*;
 import javax.swing.*;
 
 public class Sprite extends JComponent{
     
     public static final int SPRITE_SIZE = 32;
+    
+    public static final List<SpriteLoc> WALKABLE = Arrays.asList(SpriteLoc.FLOOR, SpriteLoc.DOOR4);
     
     protected int x;
     protected int y;
@@ -115,18 +119,19 @@ public class Sprite extends JComponent{
     public void incX(int nx) {
         int ax = x + nx;
         //System.out.println(ax);
-        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (Game.map[ax/SPRITE_SIZE][y/SPRITE_SIZE] == SpriteLoc.FLOOR)
-                                                            && (Game.map[ax/SPRITE_SIZE + 1][y/SPRITE_SIZE] == SpriteLoc.FLOOR)
-                                                            && (Game.map[ax/SPRITE_SIZE][y/SPRITE_SIZE + 1] == SpriteLoc.FLOOR))
+        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][y/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax)/SPRITE_SIZE + 1][y/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE + 1])))
             x += nx;
     }
     
     public void incY(int ny) {
         int ay = y + ny;
         //System.out.println(ay);
-        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (Game.map[x/SPRITE_SIZE][ay/SPRITE_SIZE] == SpriteLoc.FLOOR)
-                                                             && (Game.map[x/SPRITE_SIZE][ay/SPRITE_SIZE + 1] == SpriteLoc.FLOOR)
-                                                             && (Game.map[x/SPRITE_SIZE + 1][ay/SPRITE_SIZE] == SpriteLoc.FLOOR))
+        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][ay/SPRITE_SIZE]))
+                                                             && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][ay/SPRITE_SIZE + 1]))
+                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][ay/SPRITE_SIZE])))
             y += ny;
     }
     

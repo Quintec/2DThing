@@ -52,6 +52,7 @@ public class Game {
     public static final Color HP_FILL = new Color(255, 0, 0);
     
     public static SpriteLoc[][] map;
+    private static HashMap<Location, Door> doors;
 
     public static void main(String[] args) throws IOException {
         /*map = new SpriteLoc[BOARD_HEIGHT / 32][BOARD_WIDTH / 32];
@@ -60,42 +61,6 @@ public class Game {
                 map[i][j] = SpriteLoc.FLOOR;
             }
         }*/
-        
-        BufferedReader in = new BufferedReader(new FileReader("map.txt"));
-        StringTokenizer st = new StringTokenizer(in.readLine());
-        int w = Integer.parseInt(st.nextToken());
-        int h = Integer.parseInt(st.nextToken());
-        
-        BOARD_WIDTH = w * 32;
-        BOARD_HEIGHT = h * 32;
-        
-        map = new SpriteLoc[w][h];
-        
-        for (int i = 0; i < h; i++) {
-            char[] line = in.readLine().toCharArray();
-            for (int j = 0; j < w; j++) {
-                switch (line[j]) {
-                    case '+':
-                        map[j][i] = SpriteLoc.WALL_CORNER_TOP;
-                        break;
-                    case 't':
-                        map[j][i] = SpriteLoc.WALL_CORNER_BOTTOM;
-                        break;
-                    case '-':
-                        map[j][i] = SpriteLoc.WALL_HORIZONTAL;
-                        break;
-                    case '|':
-                        map[j][i] = SpriteLoc.WALL_VERTICAL;
-                        break;
-                    case 'd':
-                        map[j][i] = SpriteLoc.DOOR;
-                        break;
-                    default:
-                        map[j][i] = SpriteLoc.FLOOR;
-                }
-            }
-        }
-        
         new Game().start();
     }
 
@@ -139,18 +104,59 @@ public class Game {
         control.add(pad);
         control.add(mpBar);
         control.add(hpBar);
+        
+        initMap();
 
         frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT + 15 + 12));
         frame.getContentPane().add(control, BorderLayout.SOUTH);
         frame.getContentPane().add(mapPanel, BorderLayout.NORTH);
         //frame.getContentPane().add(main);
-        
-
+       
         initBindings();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+    }
+    
+    private void initMap() throws IOException{
+        
+        BufferedReader in = new BufferedReader(new FileReader("map.txt"));
+        StringTokenizer st = new StringTokenizer(in.readLine());
+        int w = Integer.parseInt(st.nextToken());
+        int h = Integer.parseInt(st.nextToken());
+        
+        BOARD_WIDTH = w * 32;
+        BOARD_HEIGHT = h * 32;
+        
+        map = new SpriteLoc[w][h];
+        doors = new HashMap<Location, Door>();
+        
+        for (int i = 0; i < h; i++) {
+            char[] line = in.readLine().toCharArray();
+            for (int j = 0; j < w; j++) {
+                switch (line[j]) {
+                    case '+':
+                        map[j][i] = SpriteLoc.WALL_CORNER_TOP;
+                        break;
+                    case 't':
+                        map[j][i] = SpriteLoc.WALL_CORNER_BOTTOM;
+                        break;
+                    case '-':
+                        map[j][i] = SpriteLoc.WALL_HORIZONTAL;
+                        break;
+                    case '|':
+                        map[j][i] = SpriteLoc.WALL_VERTICAL;
+                        break;
+                    case 'd':
+                        map[j][i] = SpriteLoc.DOOR1;
+                        doors.put(new Location(j, i), new Door(j, i, SpriteLoc.DOOR1, frame));
+                        break;
+                    default:
+                        map[j][i] = SpriteLoc.FLOOR;
+                }
+            }
+        }
     }
 
     private void initBindings() {
@@ -185,6 +191,9 @@ public class Game {
         main.getActionMap().put("rup", new ActionWrapper((e)->keys.remove(Character.UP)));
         main.getActionMap().put("rright", new ActionWrapper((e)->keys.remove(Character.RIGHT)));
         main.getActionMap().put("rdown", new ActionWrapper((e)->keys.remove(Character.DOWN)));
+        
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("F"), "interact");
+        main.getActionMap().put("interact", new ActionWrapper((e) -> doors.get(new Location(8, 5)).toggle()));
     }
 
     public void start() {
@@ -358,8 +367,13 @@ public class Game {
             super.paintComponent(g);
             for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[0].length; j++) {
-                    Image curr = Sprite.getImageAt(map[i][j]);
-                    g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                    if (map[i][j].name().startsWith("DOOR")) {
+                        g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                        g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                    } else {
+                        Image curr = Sprite.getImageAt(map[i][j]);
+                        g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                    }
                    // System.out.println("drawn " + i + ", " + j);
                 }
             }

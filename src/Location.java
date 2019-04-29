@@ -52,4 +52,21 @@ public class Location
     x*=rx;
     y*=ry;
   }
+  
+  @Override
+  public boolean equals(Object o) {
+      if (o instanceof Location) {
+          Location l = (Location) o;
+          return this.x == l.x && this.y == l.y;
+      }
+      return false;
+  }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
+        hash = 79 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+        return hash;
+    }
 }
