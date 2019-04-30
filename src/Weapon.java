@@ -40,7 +40,7 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     }
     
     public void init() {
-        this.wep = new Sprite(this.user.getX(), this.user.getY(), type + stage + ".png", width, height);
+        this.wep = new Sprite(this.user.getX(), this.user.getY(), type + stage + ".png", width, height, dir);
         //this.wep.resizeTo(width, height);
         this.parent.add(wep);
     }
