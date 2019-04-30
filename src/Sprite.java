@@ -8,7 +8,7 @@ import java.util.List;
 import javax.imageio.*;
 import javax.swing.*;
 
-public class Sprite extends JComponent{
+public class Sprite extends JComponent {
     
     public static final int SPRITE_SIZE = 32;
     
@@ -147,10 +147,11 @@ public class Sprite extends JComponent{
             AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage bimage = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-    // Draw the image on to the buffered image
-    Graphics2D bGr = bimage.createGraphics();
-    bGr.drawImage(this.img, 0, 0, null);
-    bGr.dispose();
+            // Draw the image on to the buffered image
+            Graphics2D bGr = bimage.createGraphics();
+            bGr.drawImage(this.img, 0, 0, null);
+            bGr.dispose();
+            
             this.img = op.filter(bimage, null);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
