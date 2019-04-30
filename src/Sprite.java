@@ -58,7 +58,7 @@ public class Sprite extends JComponent{
         this.setLocation(0, 0);
     }
     
-    public Sprite(int xc, int yc, String path, int w, int h, int d) {//necessary?
+    public Sprite(int xc, int yc, String path, int w, int h, int dir) {//necessary?
         this.x = xc;
         this.y = yc;
         
@@ -68,6 +68,32 @@ public class Sprite extends JComponent{
         if (path != null) {
             try {
                 this.img = ImageIO.read(new File(path)).getScaledInstance(this.width, this.height, Image.SCALE_DEFAULT);
+            double rotationRequired;
+            if (dir==0) {
+              rotationRequired = Math.toRadians(90);
+            }
+            else if (dir==1) {
+              rotationRequired = Math.toRadians(180);  
+            }
+            else if (dir==3) {
+              rotationRequired = Math.toRadians(270);
+            }
+            else {
+              rotationRequired = 0;
+            }
+            
+            double locationX = width / 2;
+            double locationY = height / 2;
+            AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage bimage = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+    // Draw the image on to the buffered image
+    Graphics2D bGr = bimage.createGraphics();
+    bGr.drawImage(this.img, 0, 0, null);
+    bGr.dispose();
+            this.img = op.filter(bimage, null);
+
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
