@@ -196,23 +196,29 @@ public class Sprite extends JComponent {
         incY(ay - y);
     }
     
-    public void incX(int nx) {
+    public boolean incX(int nx) {
         int ax = x + nx;
         //System.out.println(ax);
         if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE]))
                                                             && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][y/SPRITE_SIZE]))
                                                             && (WALKABLE.contains(Game.map[(ax)/SPRITE_SIZE + 1][y/SPRITE_SIZE]))
-                                                            && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE + 1])))
+                                                            && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE + 1]))) {
             x += nx;
+            return true;
+        }
+        return false;
     }
     
-    public void incY(int ny) {
+    public boolean incY(int ny) {
         int ay = y + ny;
         //System.out.println(ay);
         if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][ay/SPRITE_SIZE]))
                                                              && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][ay/SPRITE_SIZE + 1]))
-                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][ay/SPRITE_SIZE])))
+                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][ay/SPRITE_SIZE]))) {
             y += ny;
+            return true;
+        }
+        return false;
     }
     
     @Override

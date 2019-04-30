@@ -11,17 +11,21 @@ public class Arrow extends Weapon {
             if (i == 1)
                 this.init();
             else {
-              if (this.dir==0) {
-                this.wep.y += 3;
+              if (this.dir == Character.DOWN) {
+                if (!this.wep.incY(3))
+                    return null;
               }
-              else if (this.dir==1) {
-                this.wep.x-=3;
+              else if (this.dir == Character.LEFT) {
+                if (!this.wep.incX(-3))
+                    return null;
               }
-              else if (this.dir==2) {
-                this.wep.x += 3;
+              else if (this.dir == Character.RIGHT) {
+                  if (!this.wep.incX(3))
+                      return null;
               }
-              else if (this.dir==3) {
-                this.wep.y -=3;
+              else if (this.dir == Character.UP) {
+                  if (!this.wep.incY(-3))
+                      return null;
               }
                 if (i % 9 == 0) {
                     this.stage++;

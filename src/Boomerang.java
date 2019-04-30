@@ -12,7 +12,8 @@ public class Boomerang extends Weapon {
             if (i == 0)
                 this.init();
             else {
-                this.wep.x += 3;
+                if (!this.wep.incX(3))
+                    return null;
                 if (i % 10 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png");
@@ -29,7 +30,8 @@ public class Boomerang extends Weapon {
         this.parent.repaint();
 
         for (int i = 0; i < 50; i++) {
-            this.wep.x -= 3;
+            if (!this.wep.incX(-3))
+                    return null;
             if (i % 10 == 0) {
                 this.stage++;
                 this.wep.setImage(this.type + this.stage + ".png");
