@@ -28,9 +28,9 @@ public class Game {
     public static final int NUM_SHAPES = 6;
     public static final int CIRCLE = 0;
     public static final int SQUARE = 1;
-    public static final int LEFT_LINE = 2;
-    public static final int RIGHT_LINE = 3;
-    public static final int DOWN_LINE = 4;
+    public static final int LEFT_LINE = 3;
+    public static final int RIGHT_LINE = 4;
+    public static final int DOWN_LINE = 2;
     public static final int UP_LINE = 5;
 
     public static final int SPEED = 1;
@@ -224,7 +224,7 @@ public class Game {
                 shape = this.getShape(pad.ml.getDragged());
                 System.out.println(shape);
                 if (shape == Game.CIRCLE) {
-                    main.fireWeapon("Boomerang");
+                    main.fireWeapon("Ring");
                 } else if (shape == Game.RIGHT_LINE) {
                     main.fireWeapon("Arrow",2);
                     comboTime = COMBO_TIME;
@@ -249,6 +249,7 @@ public class Game {
               if (pad.ml.isClicking())
               {
                 drawingSecond = true;
+                comboTime = COMBO_TIME;
               }
             }
             else
@@ -260,12 +261,18 @@ public class Game {
             {
               int shape2 = this.getShape(pad.ml.getDragged());
               if (shape2==CIRCLE)
-                main.fireWeapon("Arrow");
+                main.fireWeapon("Boomerang",shape-2);
               else if (shape2==SQUARE)
-                main.fireWeapon("Arrow");
-              else
               {
-                //fire projectile that shape2 normally represents
+                main.fireWeapon("Arrow",0);
+                main.fireWeapon("Arrow",1);
+                main.fireWeapon("Arrow",2);
+                main.fireWeapon("Arrow",3);
+                System.out.println("Square");
+              }
+              else if (shape2!=-1)
+              {
+                main.fireWeapon("Arrow",shape2-2);
               }
                 
               comboTime = 0;
