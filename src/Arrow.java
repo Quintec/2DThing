@@ -6,7 +6,7 @@ public class Arrow extends Weapon {
     }
 
    @Override
-    protected Object doInBackground() throws Exception {//TODO: Obey directions
+    protected Object doInBackground() throws Exception {
         for (int i = 1; i < 54; i++) {
             if (i == 1)
                 this.init();
