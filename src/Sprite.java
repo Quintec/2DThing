@@ -20,6 +20,10 @@ public class Sprite extends JComponent {
     protected int width;
     protected int height;
     
+    private boolean under;
+    
+    private boolean underPaint;
+    
     protected Image img;
     
     protected static BufferedImage spriteSheet;
@@ -47,6 +51,9 @@ public class Sprite extends JComponent {
         this.width = w;
         this.height = h;
         
+        this.under = false;
+        this.underPaint = false;
+        
         if (path != null) {
             try {
                 this.img = ImageIO.read(new File(path)).getScaledInstance(this.width, this.height, Image.SCALE_DEFAULT);
@@ -64,6 +71,9 @@ public class Sprite extends JComponent {
         
         this.width = w;
         this.height = h;
+        
+        this.under = false;
+        this.underPaint = false;
         
         if (path != null) {
             try {
@@ -198,11 +208,14 @@ public class Sprite extends JComponent {
     
     public boolean incX(int nx) {
         int ax = x + nx;
+        
+        this.under = (Game.map[(ax + 7)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE].name().startsWith("WALL"))
+                || (Game.map[(ax + 25)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE].name().startsWith("WALL"));
         //System.out.println(ax);
-        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE]))
-                                                            && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][y/SPRITE_SIZE]))
-                                                            && (WALKABLE.contains(Game.map[(ax)/SPRITE_SIZE + 1][y/SPRITE_SIZE]))
-                                                            && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][y/SPRITE_SIZE + 1]))) {
+        if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][(y - 18)/SPRITE_SIZE + 1]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][(y - 18)/SPRITE_SIZE + 1]))) {
             x += nx;
             return true;
         }
@@ -212,9 +225,13 @@ public class Sprite extends JComponent {
     public boolean incY(int ny) {
         int ay = y + ny;
         //System.out.println(ay);
-        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][ay/SPRITE_SIZE]))
-                                                             && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][ay/SPRITE_SIZE + 1]))
-                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][ay/SPRITE_SIZE]))) {
+        this.under = (Game.map[(x + 6)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE].name().startsWith("WALL"))
+                || (Game.map[(x + 26)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE].name().startsWith("WALL"));
+        
+        if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE]))
+                                                             && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][(ay - 18)/SPRITE_SIZE + 1]))
+                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE]))
+                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][(ay - 18)/SPRITE_SIZE + 1]))) {
             y += ny;
             return true;
         }
@@ -230,7 +247,19 @@ public class Sprite extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         
         //g2.clearRect(0, 0, this.getWidth(), this.getHeight());
-        g2.drawImage(img, 0, 0, null);
+        if (!under) {
+            Game.mapPanel.clearUnder();
+            g2.drawImage(img, 0, 0, null);
+        } else {
+            Game.mapPanel.addUnder(this);
+        }
+        
+        /*if (under) {
+            Game.mapPanel.gg.drawImage(img, x, y, null);
+            System.out.println("under");
+            Game.mapPanel.gg.drawImage(getImageAt(Game.map[(x + 6)/SPRITE_SIZE][y/SPRITE_SIZE + 1]), x / SPRITE_SIZE * SPRITE_SIZE + 1, y / SPRITE_SIZE * SPRITE_SIZE + 2, null);
+            Game.mapPanel.gg.drawImage(getImageAt(Game.map[(x + 26)/SPRITE_SIZE][y/SPRITE_SIZE + 1]), x / SPRITE_SIZE * SPRITE_SIZE + 1, y / SPRITE_SIZE * SPRITE_SIZE + 2, null);
+        }*/
     }
     
     @Override

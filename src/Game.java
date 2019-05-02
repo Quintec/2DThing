@@ -7,8 +7,8 @@ import javax.swing.border.*;
 
 public class Game {
 
-    private JFrame frame;
-    private Map mapPanel;
+    public static JFrame frame;
+    public static Map mapPanel;
     private JPanel control;
     private DrawPanel pad;
     private MPBar mpBar;
@@ -372,11 +372,25 @@ public class Game {
         }
     }
     
-    private class Map extends JPanel {
+    public class Map extends JPanel {
+        
+        private ArrayList<Sprite> unders = new ArrayList<>();
+        
+        public void addUnder(Sprite s) {
+            unders.add(s);
+        }
+        
+        public void clearUnder() {
+            unders.clear();
+        }
         
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            
+            for (Sprite s : unders) {
+                g.drawImage(s.getImage(), s.getX(), s.getY(), null);
+            }
             for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[0].length; j++) {
                     if (map[i][j].name().startsWith("DOOR")) {
