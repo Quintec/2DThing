@@ -7,7 +7,9 @@ public class Arrow extends Weapon {
 
    @Override
     protected Object doInBackground() throws Exception {
-        for (int i = 1; i < 54; i++) {
+        int i = 0;
+        while (true) {
+            i++;
             if (i == 1)
                 this.init();
             else {
@@ -27,17 +29,16 @@ public class Arrow extends Weapon {
                   if (!this.wep.incY(-3))
                       return null;
               }
-                if (i % 9 == 0) {
+                /*if (i % 9 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png", this.dir);
-                }
+                }*/
             }
             try { Thread.sleep(10);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }
-        
-        return null;
+
     }
 
     @Override
