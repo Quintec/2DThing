@@ -209,8 +209,8 @@ public class Sprite extends JComponent {
     public boolean incX(int nx) {
         int ax = x + nx;
         
-        this.under = (Game.map[(ax + 7)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE].name().startsWith("WALL"))
-                || (Game.map[(ax + 25)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE].name().startsWith("WALL"));
+        this.under = (Game.map[(ax + 7)/SPRITE_SIZE][(y)/SPRITE_SIZE + 1].name().startsWith("WALL"))
+                || (Game.map[(ax + 25)/SPRITE_SIZE][(y)/SPRITE_SIZE + 1].name().startsWith("WALL"));
         //System.out.println(ax);
         if (0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE]))
                                                             && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE]))
@@ -225,8 +225,8 @@ public class Sprite extends JComponent {
     public boolean incY(int ny) {
         int ay = y + ny;
         //System.out.println(ay);
-        this.under = (Game.map[(x + 6)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE].name().startsWith("WALL"))
-                || (Game.map[(x + 26)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE].name().startsWith("WALL"));
+        this.under = (Game.map[(x + 6)/SPRITE_SIZE][(ay)/SPRITE_SIZE + 1].name().startsWith("WALL"))
+                || (Game.map[(x + 26)/SPRITE_SIZE][(ay)/SPRITE_SIZE + 1].name().startsWith("WALL"));
         
         if (0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE]))
                                                              && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][(ay - 18)/SPRITE_SIZE + 1]))

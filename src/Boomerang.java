@@ -8,25 +8,34 @@ public class Boomerang extends Weapon {
 
     @Override
     protected Object doInBackground() throws Exception {
+        int dist = 50;
         for (int i = 0; i < 50; i++) {
             if (i == 0)
                 this.init();
             else {
                 if (this.dir == Character.DOWN) {
-                if (!this.wep.incY(3))
-                    return null;
+                if (!this.wep.incY(3)) {
+                    dist = i;
+                    break;
+                }
               }
               else if (this.dir == Character.LEFT) {
-                if (!this.wep.incX(-3))
-                    return null;
+                if (!this.wep.incX(-3)) {
+                    dist = i;
+                    break;
+                }
               }
               else if (this.dir == Character.RIGHT) {
-                  if (!this.wep.incX(3))
-                      return null;
+                  if (!this.wep.incX(3)) {
+                    dist = i;
+                    break;
+                }
               }
               else if (this.dir == Character.UP) {
-                  if (!this.wep.incY(-3))
-                      return null;
+                  if (!this.wep.incY(-3)) {
+                    dist = i;
+                    break;
+                }
               }
                 if (i % 10 == 0) {
                     this.stage++;
@@ -37,13 +46,14 @@ public class Boomerang extends Weapon {
             this.parent.revalidate();
             this.parent.repaint();
         }
+        
         //System.out.println("second stage");
         this.stage = 1;
         this.wep.setImage(this.type + this.stage + ".png");
         this.parent.revalidate();
         this.parent.repaint();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = dist; i >= 0; i--) {
             if (this.dir == Character.DOWN) {
                 if (!this.wep.incY(-3))
                     return null;

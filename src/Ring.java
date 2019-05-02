@@ -3,7 +3,7 @@ import java.awt.*;
 public class Ring extends Weapon {
 
     public Ring(Character s, int d, Container jc) {
-        super("Ring", 10, s, d, jc, 144, 144);
+        super("Ring", 25, s, d, jc, 144, 144);
     }
 
     @Override
@@ -12,10 +12,13 @@ public class Ring extends Weapon {
             if (i == 0)
             {
                 this.init();
-                this.wep.x-=56;
-                this.wep.y-=40;
-        }
+                this.wep.x -= 56;
+                this.wep.y -= 50;
+            }
             else {
+                if (i == 20) {
+                    this.wep.y += 10;
+                }
                 if (i % 5 == 0) {
                     this.stage++;
                     this.wep.setImage("Ring" + this.stage + ".png");
@@ -23,7 +26,7 @@ public class Ring extends Weapon {
                     //System.out.println("Hi");
                 }
             }
-            try { Thread.sleep(10);} catch (InterruptedException ex) {}
+            try { Thread.sleep(12);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }

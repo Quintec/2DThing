@@ -35,7 +35,7 @@ public class Game {
 
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
-    public static final int REGEN_TIME = 60;
+    public static final int REGEN_TIME = 6;
 
     public static int BOARD_WIDTH = 320;
     public static int BOARD_HEIGHT = 320;
@@ -115,6 +115,7 @@ public class Game {
         initBindings();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
         frame.setVisible(true);
 
     }
@@ -395,21 +396,51 @@ public class Game {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             
-            for (Sprite s : unders) {
-                g.drawImage(s.getImage(), s.getX(), s.getY(), null);
-            }
-            for (int i = 0; i < map.length; i++) {
-                for (int j = 0; j < map[0].length; j++) {
-                    if (map[i][j].name().startsWith("DOOR")) {
-                        g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                        g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                    } else {
-                        Image curr = Sprite.getImageAt(map[i][j]);
-                        g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+            
+            if (unders.isEmpty()) {
+                for (int i = 0; i < map.length; i++) {
+                    for (int j = 0; j < map[0].length; j++) {
+                        if (map[i][j].name().startsWith("DOOR")) {
+                            g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                        } else {
+                            Image curr = Sprite.getImageAt(map[i][j]);
+                            g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                        }
+                       // System.out.println("drawn " + i + ", " + j);
                     }
-                   // System.out.println("drawn " + i + ", " + j);
+                }
+            } else {
+                for (int i = 0; i < map.length; i++) {
+                    for (int j = 0; j < map[0].length; j++) {
+                        if (!map[i][j].name().startsWith("WALL")){
+                            if (map[i][j].name().startsWith("DOOR")) {
+                                g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                                g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            } else {
+                                Image curr = Sprite.getImageAt(map[i][j]);
+                                g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            }
+                        }
+                       // System.out.println("drawn " + i + ", " + j);
+                    }
+                }
+                
+                for (Sprite s : unders) {
+                    g.drawImage(s.getImage(), s.getX(), s.getY(), null);
+                }
+                
+                for (int i = 0; i < map.length; i++) {
+                    for (int j = 0; j < map[0].length; j++) {
+                        if (map[i][j].name().startsWith("WALL")){
+                            Image curr = Sprite.getImageAt(map[i][j]);
+                            g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                        }
+                       // System.out.println("drawn " + i + ", " + j);
+                    }
                 }
             }
+            
         }
         
         @Override
