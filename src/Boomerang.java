@@ -7,13 +7,27 @@ public class Boomerang extends Weapon {
     }
 
     @Override
-    protected Object doInBackground() throws Exception {//TODO: Obey directions
+    protected Object doInBackground() throws Exception {
         for (int i = 0; i < 50; i++) {
             if (i == 0)
                 this.init();
             else {
-                if (!this.wep.incX(3))
+                if (this.dir == Character.DOWN) {
+                if (!this.wep.incY(3))
                     return null;
+              }
+              else if (this.dir == Character.LEFT) {
+                if (!this.wep.incX(-3))
+                    return null;
+              }
+              else if (this.dir == Character.RIGHT) {
+                  if (!this.wep.incX(3))
+                      return null;
+              }
+              else if (this.dir == Character.UP) {
+                  if (!this.wep.incY(-3))
+                      return null;
+              }
                 if (i % 10 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png");
@@ -30,8 +44,22 @@ public class Boomerang extends Weapon {
         this.parent.repaint();
 
         for (int i = 0; i < 50; i++) {
-            if (!this.wep.incX(-3))
+            if (this.dir == Character.DOWN) {
+                if (!this.wep.incY(-3))
                     return null;
+              }
+              else if (this.dir == Character.LEFT) {
+                if (!this.wep.incX(3))
+                    return null;
+              }
+              else if (this.dir == Character.RIGHT) {
+                  if (!this.wep.incX(-3))
+                      return null;
+              }
+              else if (this.dir == Character.UP) {
+                  if (!this.wep.incY(3))
+                      return null;
+              }
             if (i % 10 == 0) {
                 this.stage++;
                 this.wep.setImage(this.type + this.stage + ".png");
