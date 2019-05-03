@@ -353,6 +353,15 @@ public class Game {
         //System.out.println(min);
         return min;
     }
+    
+    public class InterAction extends AbstractAction {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    }
 
     public class ActionWrapper extends AbstractAction {
 
@@ -417,14 +426,9 @@ public class Game {
             } else {
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
-                        if (!map[i][j].name().startsWith("WALL")){
-                            if (map[i][j].name().startsWith("DOOR")) {
-                                g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                                g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                            } else {
-                                Image curr = Sprite.getImageAt(map[i][j]);
-                                g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                            }
+                        if (!(map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR"))){
+                            Image curr = Sprite.getImageAt(map[i][j]);
+                            g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         }
                        // System.out.println("drawn " + i + ", " + j);
                     }
@@ -436,9 +440,14 @@ public class Game {
                 
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
-                        if (map[i][j].name().startsWith("WALL")){
-                            Image curr = Sprite.getImageAt(map[i][j]);
-                            g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                        if (map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR")) {
+                            if (map[i][j].name().startsWith("DOOR")) {
+                                g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                                g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            } else {
+                                Image curr = Sprite.getImageAt(map[i][j]);
+                                g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            }
                         }
                        // System.out.println("drawn " + i + ", " + j);
                     }
