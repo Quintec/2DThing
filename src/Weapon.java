@@ -49,5 +49,10 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     protected abstract Object doInBackground() throws Exception;
     
     @Override
-    protected abstract void done();
+    protected void done() {
+        this.parent.remove(this.wep);
+        Game.mapPanel.unders.remove(this.wep);
+        this.parent.revalidate();
+        this.parent.repaint();
+    }
 }

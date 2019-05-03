@@ -40,13 +40,5 @@ public class Arrow extends Weapon {
         }
 
     }
-
-    @Override
-    protected void done() {
-        this.parent.remove(this.wep);
-        
-        this.parent.revalidate();
-            this.parent.repaint();
-    }
     
 }

@@ -35,7 +35,7 @@ public class Game {
 
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
-    public static final int REGEN_TIME = 6;
+    public static final int REGEN_TIME = 60;
 
     public static int BOARD_WIDTH = 320;
     public static int BOARD_HEIGHT = 320;
@@ -386,7 +386,7 @@ public class Game {
     
     public class Map extends JPanel {
         
-        private ArrayList<Sprite> unders = new ArrayList<>();
+        public HashSet<Sprite> unders = new HashSet<>();
         
         public void addUnder(Sprite s) {
             unders.add(s);

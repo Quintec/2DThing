@@ -81,11 +81,4 @@ public class Boomerang extends Weapon {
         return null;
     }
 
-    @Override
-    protected void done() {
-        this.parent.remove(this.wep);
-        this.parent.revalidate();
-            this.parent.repaint();
-    }
-
 }
