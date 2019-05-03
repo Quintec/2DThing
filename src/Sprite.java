@@ -200,12 +200,12 @@ public class Sprite extends JComponent {
         this.img = this.img.getScaledInstance(w, h, Image.SCALE_DEFAULT);
     }
     
-    public void setX(int ax) {
-        incX(ax - x);
+    public boolean setX(int ax) {
+        return incX(ax - x);
     }
     
-    public void setY(int ay) {
-        incY(ay - y);
+    public boolean setY(int ay) {
+        return incY(ay - y);
     }
     
     public boolean incX(int nx) {
