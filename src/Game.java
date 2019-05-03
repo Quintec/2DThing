@@ -54,6 +54,8 @@ public class Game {
     public static SpriteLoc[][] map;
     private static HashMap<Location, Door> doors;
 
+    public static HashSet<Enemy> enemies;
+    
     public static void main(String[] args) throws IOException {
         /*map = new SpriteLoc[BOARD_HEIGHT / 32][BOARD_WIDTH / 32];
         for (int i = 0; i < map.length; i++) {
@@ -91,6 +93,8 @@ public class Game {
         
         mapPanel.add(main);
 
+        enemies = new HashSet<Enemy>();
+        
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
 
         TitledBorder tb = BorderFactory.createTitledBorder(b, "D-Pad");

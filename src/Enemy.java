@@ -1,6 +1,6 @@
 public abstract class Enemy extends Sprite {
     
-    private Character target;
+    public Character target;
     
     public Enemy(int xc, int yc, String path, Character main, int w, int h) {
         super(xc, yc, path, w, h);
