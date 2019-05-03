@@ -23,6 +23,8 @@ public class Door extends Sprite {
 
         @Override
         protected Object doInBackground() throws Exception {
+            
+            
             if (closed) {
                 for (int i = 2; i < 5; i++) {
                     try { Thread.sleep(30);} catch (InterruptedException ex) {}

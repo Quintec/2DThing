@@ -297,11 +297,18 @@ public class Game {
                 main.toggle();
             
             main.setStill(keys.isEmpty());
-
+            Rectangle me = main.getBounds();//TODO: REDO BOUNDS
           for (Enemy e: enemies)
           {
             e.update();
+            Rectangle re = e.getBounds();
+            
+            if (re.intersects(me)) {
+                main.incHP(-e.getHitDmg());
+            }
           }
+          
+          
             
             frame.repaint();
         }
@@ -479,7 +486,7 @@ public class Game {
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
             g.setColor(HP_FILL);
             g.fillRect(0, 0, (int) (main.getHP() * 1.0 / Character.MAX_HP * this.getWidth()), this.getHeight());
-            mpLabel.setText("MP: " + main.getHP() + "/" + Character.MAX_HP);
+            hpLabel.setText("HP: " + main.getHP() + "/" + Character.MAX_HP);
         }
 
         @Override
