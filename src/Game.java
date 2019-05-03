@@ -157,6 +157,10 @@ public class Game {
                         map[j][i] = SpriteLoc.DOOR1;
                         doors.put(new Location(j, i), new Door(j, i, SpriteLoc.DOOR1, frame));
                         break;
+                    case 'b':
+                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main);
+                        enemies.add(en);
+                        mapPanel.add(en);
                     default:
                         map[j][i] = SpriteLoc.FLOOR;
                 }
@@ -294,6 +298,11 @@ public class Game {
             
             main.setStill(keys.isEmpty());
 
+          for (Enemy e: enemies)
+          {
+            e.update();
+          }
+            
             frame.repaint();
         }
     }
