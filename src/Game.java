@@ -298,6 +298,8 @@ public class Game {
             
             main.setStill(keys.isEmpty());
             Rectangle me = main.getBounds();//TODO: REDO BOUNDS
+            me.grow(0, -6);
+            
           for (Enemy e: enemies)
           {
             e.update();
