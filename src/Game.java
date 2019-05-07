@@ -35,7 +35,9 @@ public class Game {
 
     public static final int SPEED = 1;
     public static final int REGEN_RATE = 1;
-    public static final int REGEN_TIME = 60;
+    public static final int REGEN_TIME = 30;
+    public static final int DAMAGE_FRAMES = 30;
+    public static final int TOGGLE_FRAMES = 12;
 
     public static int BOARD_WIDTH = 320;
     public static int BOARD_HEIGHT = 320;
@@ -289,11 +291,13 @@ public class Game {
             }
             
             if (++time % REGEN_TIME == 0) {
-                time = 0;
                 main.incMP(REGEN_RATE);
             }
             
-            if (time % 12 == 0)
+            if (time == TOGGLE_FRAMES * DAMAGE_FRAMES * REGEN_TIME)
+                time = 0;
+            
+            if (time % TOGGLE_FRAMES == 0)
                 main.toggle();
             
             main.setStill(keys.isEmpty());
@@ -305,7 +309,7 @@ public class Game {
             e.update();
             Rectangle re = e.getBounds();
             
-            if (re.intersects(me)) {
+            if (re.intersects(me) && time % DAMAGE_FRAMES == 0) {
                 main.incHP(-e.getHitDmg());
             }
           }
