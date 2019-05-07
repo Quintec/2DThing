@@ -250,7 +250,7 @@ public class Sprite extends JComponent {
         
         //g2.clearRect(0, 0, this.getWidth(), this.getHeight());
         if (!under) {
-            Game.mapPanel.clearUnder();
+            Game.mapPanel.unders.remove(this);
             g2.drawImage(img, 0, 0, null);
         } else {
             Game.mapPanel.addUnder(this);
