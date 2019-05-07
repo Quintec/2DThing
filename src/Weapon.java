@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.HashSet;
 import javax.swing.*;
 
 public abstract class Weapon extends SwingWorker<Object, Object> {
@@ -8,6 +9,9 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     protected int mpReq;
     protected Sprite wep;
     protected int stage;
+    protected int dmg;
+    
+    protected HashSet<Enemy> hits;
     
     protected int width;
     protected int height;
@@ -16,7 +20,7 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
     
     protected Container parent;
         
-    public Weapon(String t, int mpr, Character s, int d, Container jc, int w, int h) {
+    public Weapon(String t, int mpr, Character s, int d, Container jc, int w, int h, int dmg) {
         this.type = t;
         this.user = s;
         this.stage = 1;
@@ -28,6 +32,9 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
         this.dir = d;
         
         this.parent = jc;
+        
+        this.hits = new HashSet<Enemy>();
+        this.dmg = dmg;
     }
     
     public boolean activate() {
@@ -54,5 +61,11 @@ public abstract class Weapon extends SwingWorker<Object, Object> {
         Game.mapPanel.unders.remove(this.wep);
         this.parent.revalidate();
         this.parent.repaint();
+    }
+    
+    protected abstract boolean checkHits();
+    
+    public int getDmg() {
+        return this.dmg;
     }
 }

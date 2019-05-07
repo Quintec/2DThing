@@ -1,8 +1,10 @@
 import java.awt.Container;
+import java.awt.Rectangle;
+import java.util.Iterator;
 public class Arrow extends Weapon {
 
     public Arrow(Character s, int d, Container jc) {
-        super("Arrow", 10, s, d, jc, 32, 32);
+        super("Arrow", 10, s, d, jc, 32, 32, 10);
     }
 
    @Override
@@ -34,11 +36,38 @@ public class Arrow extends Weapon {
                     this.wep.setImage(this.type + this.stage + ".png", this.dir);
                 }*/
             }
+            if (this.checkHits()) {
+                return null;
+            }
+            
             try { Thread.sleep(10);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }
 
+    }
+    
+    protected boolean checkHits() {
+        Rectangle me = this.wep.getBounds();
+        me.grow(-12, 0);
+        Iterator<Enemy> it = Game.enemies.iterator();
+        while (it.hasNext()) {
+            Enemy e = it.next();
+            if (e.getBounds().intersects(me)) {
+                System.out.println("arrow hit");
+               // System.out.println(this.getDmg());
+                e.incHP(-this.getDmg());
+              //  System.out.println(e.getHP());
+                if (e.getHP() <= 0) {
+                    it.remove();
+                    this.parent.remove(e);
+                }
+                
+                return true;
+            }
+        }
+        
+        return false;
     }
     
 }

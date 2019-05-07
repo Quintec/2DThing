@@ -15,7 +15,8 @@ public class Game {
     private HPBar hpBar;
     private JLabel mpLabel;
     private JLabel hpLabel;
-    private Character main;
+    
+    public static Character main;
 
     private static final int IM = JComponent.WHEN_FOCUSED;
 

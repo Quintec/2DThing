@@ -47,6 +47,10 @@ public class Location
     y+=dy;
   }
   
+  public Location getTranslated(double dx, double dy) {
+      return new Location(x + dx, y + dy);
+  }
+  
   public void dilate(double rx, double ry)
   {
     x*=rx;
