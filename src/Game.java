@@ -161,7 +161,7 @@ public class Game {
                         doors.put(new Location(j, i), new Door(j, i, SpriteLoc.DOOR1, frame));
                         break;
                     case 'b':
-                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main);
+                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main, enemies);
                         enemies.add(en);
                         mapPanel.add(en);
                     default:
@@ -308,10 +308,19 @@ public class Game {
           for (Enemy e: enemies)
           {
             e.update();
+            boolean intersected = false;
             Rectangle re = e.getBounds();
             
-            if (re.intersects(me) && time % DAMAGE_FRAMES == 0) {
+            if (re.intersects(me))
+            {
+              intersected = true;
+              if (time % DAMAGE_FRAMES == 0) {
                 main.incHP(-e.getHitDmg());
+              }
+            }
+            if (e.overlapsOtherEnemies()||intersected)
+            {
+              e.moveTo(e.getPrevLoc());
             }
           }
           
