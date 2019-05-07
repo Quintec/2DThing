@@ -1,10 +1,13 @@
+import java.util.*;
+
 public class BasicEnemy extends Enemy {
   private final double SPEED = 0.5;
-  private final Location loc;
+  
 
-    public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main) {
-        super(xc, yc, sl, main, 10, 30);
+    public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
+        super(xc, yc, sl, main, 10, 30, en);
         loc = new Location(xc,yc);  
+        prevLoc = new Location(xc,yc);  
 
     }
 
@@ -15,10 +18,14 @@ public class BasicEnemy extends Enemy {
         int xOld = this.x;
         int yOld = this.y;
         loc.translate(SPEED*dx/Math.sqrt(dx*dx+dy*dy),SPEED*dy/Math.sqrt(dx*dx+dy*dy));
-        if (!this.setX((int)loc.getX()))
+        if (!this.setX((int)loc.getX()))//||overlapsOtherEnemies())
           loc.setX(xOld);
-        if (!this.setY((int)loc.getY()))
+        else
+          prevLoc.setX(xOld);
+        if (!this.setY((int)loc.getY()))//||overlapsOtherEnemies())
           loc.setY(yOld);
+        else
+          prevLoc.setY(yOld);
         //if (xOld==this.x)
           //loc.setX(xOld);
         //if (yOld==this.y)
@@ -29,4 +36,6 @@ public class BasicEnemy extends Enemy {
         else
           this.incY((int)(SPEED*dy/Math.abs(dy)));*/
     }
+   
+    
 }
