@@ -51,6 +51,10 @@ public class Location
       return new Location(x + dx, y + dy);
   }
   
+  public Location snapToGrid() {
+      return new Location(x / Character.SPRITE_SIZE, y / Character.SPRITE_SIZE);
+  }
+  
   public void dilate(double rx, double ry)
   {
     x*=rx;
@@ -72,5 +76,10 @@ public class Location
         hash = 79 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
         hash = 79 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
         return hash;
+    }
+    
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
     }
 }

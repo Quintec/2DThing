@@ -55,7 +55,8 @@ public class Game {
     public static final Color HP_FILL = new Color(255, 0, 0);
     
     public static SpriteLoc[][] map;
-    private static HashMap<Location, Door> doors;
+    
+    private static HashMap<Location, Interactable> interactables;
 
     public static HashSet<Enemy> enemies;
     
@@ -138,7 +139,7 @@ public class Game {
         BOARD_HEIGHT = h * 32;
         
         map = new SpriteLoc[w][h];
-        doors = new HashMap<Location, Door>();
+        interactables = new HashMap<Location, Interactable>();
         
         for (int i = 0; i < h; i++) {
             char[] line = in.readLine().toCharArray();
@@ -158,7 +159,7 @@ public class Game {
                         break;
                     case 'd':
                         map[j][i] = SpriteLoc.DOOR1;
-                        doors.put(new Location(j, i), new Door(j, i, SpriteLoc.DOOR1, frame));
+                        interactables.put(new Location(j, i), new Door(j, i, SpriteLoc.DOOR1, frame));
                         break;
                     case 'b':
                         Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main, enemies);
@@ -205,7 +206,7 @@ public class Game {
         main.getActionMap().put("rdown", new ActionWrapper((e)->keys.remove(Character.DOWN)));
         
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("F"), "interact");
-        main.getActionMap().put("interact", new ActionWrapper((e) -> doors.get(new Location(8, 5)).toggle()));
+        main.getActionMap().put("interact", new InterAction());
     }
 
     public void start() {
@@ -234,7 +235,7 @@ public class Game {
 
             if (!drawingSecond&&pad.ml.finishedShape()) {
                 shape = this.getShape(pad.ml.getDragged());
-                System.out.println(shape);
+                //System.out.println(shape);
                 if (shape == Game.CIRCLE) {
                     main.fireWeapon("Ring");
                 } else if (shape == Game.RIGHT_LINE) {
@@ -303,7 +304,7 @@ public class Game {
             
             main.setStill(keys.isEmpty());
             Rectangle me = main.getBounds();//TODO: REDO BOUNDS
-            me.grow(0, -6);
+            me.grow(-6, 0);
             
           for (Enemy e: enemies)
           {
@@ -318,10 +319,10 @@ public class Game {
                 main.incHP(-e.getHitDmg());
               }
             }
-            if (e.overlapsOtherEnemies()||intersected)
+            /*if (e.overlapsOtherEnemies()||intersected)
             {
               e.moveTo(e.getPrevLoc());
-            }
+            }*/
           }
           
           
@@ -389,8 +390,42 @@ public class Game {
     public class InterAction extends AbstractAction {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public void actionPerformed(ActionEvent e) {//TODO: DO NOT SNAP TO GRID
+            //System.out.println("ineract");
+            HashSet<Location> facing = new HashSet<Location>();
+            Location curr = main.getGridLoc();
+            facing.add(curr);
+            switch (main.getDir()) {
+                case Character.LEFT:
+                    facing.add(curr.getTranslated(-1, -1));
+                    facing.add(curr.getTranslated(-1, 0));
+                    facing.add(curr.getTranslated(-1, 1));
+                    break;
+                case Character.UP:
+                    facing.add(curr.getTranslated(-1, -1));
+                    facing.add(curr.getTranslated(0, -1));
+                    facing.add(curr.getTranslated(1, -1));
+                    facing.add(curr.getTranslated(-1, 0));
+                    facing.add(curr.getTranslated(1, 0));
+                    break;
+                case Character.RIGHT:
+                    facing.add(curr.getTranslated(1, -1));
+                    facing.add(curr.getTranslated(1, 0));
+                    facing.add(curr.getTranslated(1, 1));
+                    break;
+                case Character.DOWN:
+                    facing.add(curr.getTranslated(-1, 1));
+                    facing.add(curr.getTranslated(0, 1));
+                    facing.add(curr.getTranslated(1, 1));
+                    facing.add(curr.getTranslated(-1, 0));
+                    facing.add(curr.getTranslated(1, 0));
+                    break;
+            }
+            
+            for (Location l : facing) {
+                if (interactables.containsKey(l))
+                    interactables.get(l).interact();
+            }
         }
         
     }
@@ -447,7 +482,7 @@ public class Game {
                     for (int j = 0; j < map[0].length; j++) {
                         if (map[i][j].name().startsWith("DOOR")) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                            g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            g.drawImage(interactables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         } else {
                             Image curr = Sprite.getImageAt(map[i][j]);
                             g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
@@ -475,7 +510,7 @@ public class Game {
                         if (map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR")) {
                             if (map[i][j].name().startsWith("DOOR")) {
                                 g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                                g.drawImage(doors.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                                g.drawImage(interactables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             } else {
                                 Image curr = Sprite.getImageAt(map[i][j]);
                                 g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);

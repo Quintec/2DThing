@@ -4,7 +4,7 @@ import java.util.*;
 public class Ring extends Weapon {
 
     public Ring(Character s, int d, Container jc) {
-        super("Ring", 40, s, d, jc, 144, 144, 30);
+        super("Ring", 20, s, d, jc, 144, 144, 20);
     }
 
     @Override
@@ -36,17 +36,12 @@ public class Ring extends Weapon {
         }
         return null;
     }
-
-    @Override
-    protected void done() {
-        this.parent.remove(this.wep);
-    }
     
-    protected boolean checkHits() {
+    protected boolean checkHits() {  //TODO: DO NOT SNAP TO GRID
         Iterator<Enemy> it = Game.enemies.iterator();
         HashSet<Location> adj = new HashSet<Location>();
         
-        Location l = new Location(Game.main.getX() / Character.SPRITE_SIZE, Game.main.getY() / Character.SPRITE_SIZE);
+        Location l = Game.main.getGridLoc();
         adj.add(l);
         adj.add(l.getTranslated(1, 0));
         adj.add(l.getTranslated(-1, 0));
@@ -57,9 +52,21 @@ public class Ring extends Weapon {
         adj.add(l.getTranslated(1, 1));
         adj.add(l.getTranslated(1, -1));
         
+        /*Location l = new Location(Game.main.getLocation());
+        System.out.println(l);
+        adj.add(l.snapToGrid());
+        adj.add(l.getTranslated(Character.SPRITE_SIZE, 0).snapToGrid());
+        adj.add(l.getTranslated(-Character.SPRITE_SIZE, 0).snapToGrid());
+        adj.add(l.getTranslated(0, Character.SPRITE_SIZE).snapToGrid());
+        adj.add(l.getTranslated(0, -Character.SPRITE_SIZE).snapToGrid());
+        adj.add(l.getTranslated(Character.SPRITE_SIZE, Character.SPRITE_SIZE).snapToGrid());
+        adj.add(l.getTranslated(Character.SPRITE_SIZE, -Character.SPRITE_SIZE).snapToGrid());
+        adj.add(l.getTranslated(-Character.SPRITE_SIZE, Character.SPRITE_SIZE).snapToGrid());
+        adj.add(l.getTranslated(-Character.SPRITE_SIZE, -Character.SPRITE_SIZE).snapToGrid());*/
+        
         while (it.hasNext()) {
             Enemy e = it.next();
-            Location el = new Location(e.getX() / Character.SPRITE_SIZE, e.getY() / Character.SPRITE_SIZE);
+            Location el = e.getGridLoc();
             if (adj.contains(el) && !this.hits.contains(e)) {
                 System.out.println("ringhit");
                 e.incHP(-this.getDmg());

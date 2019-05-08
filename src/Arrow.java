@@ -54,7 +54,7 @@ public class Arrow extends Weapon {
         while (it.hasNext()) {
             Enemy e = it.next();
             if (e.getBounds().intersects(me)) {
-                System.out.println("arrow hit");
+                //System.out.println("arrow hit");
                // System.out.println(this.getDmg());
                 e.incHP(-this.getDmg());
               //  System.out.println(e.getHP());

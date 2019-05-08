@@ -76,6 +76,10 @@ public class Character extends Sprite {
             b.execute();*/
     }
     
+    public Location getGridLoc() {
+        return new Location(x / SPRITE_SIZE, y / SPRITE_SIZE);
+    }
+    
     public void toggle() {
         toggle = 1 - toggle;
     }
