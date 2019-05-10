@@ -11,8 +11,10 @@ public class Boomerang extends Weapon {
     protected Object doInBackground() throws Exception {
         int dist = 50;
         for (int i = 0; i < 50; i++) {
-            if (i == 0)
+            if (i == 0) {
                 this.init();
+                this.checkHits();
+            }
             else {
                 if (this.dir == Character.DOWN) {
                 if (!this.wep.incY(3)) {
@@ -94,12 +96,13 @@ public class Boomerang extends Weapon {
         while (it.hasNext()) {
             Enemy e = it.next();
             if (e.getBounds().intersects(me) && !this.hits.contains(e)) {
-                System.out.println("boomerang hit");
+                //System.out.println("boomerang hit");
                 e.incHP(-this.getDmg());
                 this.hits.add(e);
                 if (e.getHP() <= 0) {
                     it.remove();
                     this.parent.remove(e);
+                    Game.mapPanel.unders.remove(e);
                 }
             }
         }

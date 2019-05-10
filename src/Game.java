@@ -57,6 +57,7 @@ public class Game {
     public static SpriteLoc[][] map;
     
     private static HashMap<Location, Interactable> interactables;
+    private static HashSet<Animated> animables;
 
     public static HashSet<Enemy> enemies;
     
@@ -161,8 +162,17 @@ public class Game {
                         map[j][i] = SpriteLoc.DOOR1;
                         interactables.put(new Location(j, i), new Door(j, i, SpriteLoc.DOOR1, frame));
                         break;
+                    case 'w':
+                        map[j][i] = SpriteLoc.WELL;
+                        break;
+                    case 's':
+                        map[j][i] = SpriteLoc.STATUE;
+                        break;
+                    case 'f':
+                        map[j][i] = SpriteLoc.FLOOR;
+                        animables.add(new Torch(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE, main));
                     case 'b':
-                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main, enemies);
+                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.GHOST, main, enemies);
                         enemies.add(en);
                         mapPanel.add(en);
                     default:
@@ -281,7 +291,8 @@ public class Game {
                 main.fireWeapon("Arrow",1);
                 main.fireWeapon("Arrow",2);
                 main.fireWeapon("Arrow",3);
-                System.out.println("Square");
+                //System.out.println("Square");
+                main.incMP(20);
               }
               else if (shape2!=-1)
               {
@@ -324,9 +335,12 @@ public class Game {
               e.moveTo(e.getPrevLoc());
             }*/
           }
-          
-          
-            
+         
+          if (main.getHP() <= 0) {
+              mapPanel.remove(main);
+              frame.repaint();
+              break;
+          }
             frame.repaint();
         }
     }
@@ -503,6 +517,20 @@ public class Game {
                 
                 for (Sprite s : unders) {
                     g.drawImage(s.getImage(), s.getX(), s.getY(), null);
+                    if (s instanceof Enemy) {
+                        Enemy e = (Enemy) s;
+                        Graphics2D g2 = (Graphics2D) g;
+        
+                        g.setColor(Color.RED);
+                        g.fillRect(e.getX() + 2, e.getY(), Character.SPRITE_SIZE - 4, 4);
+
+                        g.setColor(Color.GREEN);
+                        g.fillRect(e.getX() + 2, e.getY(), (int) (e.getHP() * 1.0 / e.getMaxHP() * (Character.SPRITE_SIZE - 4)), 4);
+
+                        g2.setColor(Color.BLACK);
+                        g2.setStroke(new BasicStroke(0.5f));
+                        g2.drawRect(e.getX() + 2, e.getY(), Character.SPRITE_SIZE - 4, 4);
+                    }
                 }
                 
                 for (int i = 0; i < map.length; i++) {

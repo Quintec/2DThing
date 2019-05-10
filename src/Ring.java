@@ -68,12 +68,13 @@ public class Ring extends Weapon {
             Enemy e = it.next();
             Location el = e.getGridLoc();
             if (adj.contains(el) && !this.hits.contains(e)) {
-                System.out.println("ringhit");
+                //System.out.println("ringhit");
                 e.incHP(-this.getDmg());
                 this.hits.add(e);
                 if (e.getHP() <= 0) {
                     it.remove();
                     this.parent.remove(e);
+                    Game.mapPanel.unders.remove(e);
                 }
             }
         }

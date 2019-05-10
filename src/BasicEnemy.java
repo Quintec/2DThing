@@ -2,6 +2,7 @@ import java.util.*;
 
 public class BasicEnemy extends Enemy {
   private final double SPEED = 0.5;
+  private int currDir = -1;
   
 
     public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
@@ -26,6 +27,29 @@ public class BasicEnemy extends Enemy {
           loc.setY(yOld);
         else
           prevLoc.setY(yOld);
+        
+        boolean change = true;
+        if (currDir != -1) {
+            change = !((currDir == Character.RIGHT && dx > 0 && Math.abs(dx) > Math.abs(dy)) ||
+                    (currDir == Character.DOWN && dy > 0 && Math.abs(dy) > Math.abs(dx)) ||
+                    (currDir == Character.LEFT && dx < 0 && Math.abs(dx) > Math.abs(dy)) ||
+                    (currDir == Character.UP && dy < 0 && Math.abs(dy) > Math.abs(dx)));
+        }
+        if (change) {
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0)
+                    this.setDir(Character.RIGHT);
+                else
+                    this.setDir(Character.LEFT);
+            } else {
+                if (dy > 0)
+                    this.setDir(Character.DOWN);
+                else
+                    this.setDir(Character.UP);
+            }
+            
+            currDir = this.getDir();
+        }
         //if (xOld==this.x)
           //loc.setX(xOld);
         //if (yOld==this.y)

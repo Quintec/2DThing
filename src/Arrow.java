@@ -12,8 +12,12 @@ public class Arrow extends Weapon {
         int i = 0;
         while (true) {
             i++;
-            if (i == 1)
+            if (i == 1) {
                 this.init();
+                if (this.checkHits()) {
+                    return null;
+                }
+            }
             else {
               if (this.dir == Character.DOWN) {
                 if (!this.wep.incY(3))
@@ -61,6 +65,7 @@ public class Arrow extends Weapon {
                 if (e.getHP() <= 0) {
                     it.remove();
                     this.parent.remove(e);
+                    Game.mapPanel.unders.remove(e);
                 }
                 
                 return true;

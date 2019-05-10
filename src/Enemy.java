@@ -50,6 +50,10 @@ public abstract class Enemy extends Character {
         return hitDmg;
     }
     
+    public int getMaxHP() {
+        return maxHP;
+    }
+    
     public boolean overlapsOtherEnemies()
     {
       Rectangle me = this.getBounds();
