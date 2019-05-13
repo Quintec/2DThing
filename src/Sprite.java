@@ -128,6 +128,10 @@ public class Sprite extends JComponent {
         return spriteSheet.getSubimage(sl.getX() * SPRITE_SIZE, sl.getY() * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
     }
     
+    public static Image getImageAt(int xx, int yy) {
+        return spriteSheet.getSubimage(xx * SPRITE_SIZE, yy * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
+    }
+    
     public int getX() {
         return x;
     }

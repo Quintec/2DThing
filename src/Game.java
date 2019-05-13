@@ -57,7 +57,7 @@ public class Game {
     public static SpriteLoc[][] map;
     
     private static HashMap<Location, Interactable> interactables;
-    private static HashSet<Animated> animables;
+    private static HashMap<Location, Animated> animables;
 
     public static HashSet<Enemy> enemies;
     
@@ -99,6 +99,7 @@ public class Game {
         mapPanel.add(main);
 
         enemies = new HashSet<Enemy>();
+        animables = new HashMap<Location, Animated>();
         
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
 
@@ -169,8 +170,11 @@ public class Game {
                         map[j][i] = SpriteLoc.STATUE;
                         break;
                     case 'f':
-                        map[j][i] = SpriteLoc.FLOOR;
-                        animables.add(new Torch(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE, main));
+                        map[j][i] = SpriteLoc.TORCH0;
+                        Torch t = new Torch(j,i, main);
+                        animables.put(new Location(j, i), t);
+                        //mapPanel.add(t);
+                        break;
                     case 'b':
                         Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.GHOST, main, enemies);
                         enemies.add(en);
@@ -341,6 +345,9 @@ public class Game {
               frame.repaint();
               break;
           }
+          for (Animated a : animables.values())
+              a.animate();
+          
             frame.repaint();
         }
     }
@@ -497,6 +504,10 @@ public class Game {
                         if (map[i][j].name().startsWith("DOOR")) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             g.drawImage(interactables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            
+                        } else if (map[i][j].name().startsWith("TORCH")) {
+                            g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            g.drawImage(animables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         } else {
                             Image curr = Sprite.getImageAt(map[i][j]);
                             g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
@@ -507,7 +518,7 @@ public class Game {
             } else {
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
-                        if (!(map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR"))){
+                        if (!(map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR") || map[i][j].name().startsWith("TORCH"))){
                             Image curr = Sprite.getImageAt(map[i][j]);
                             g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         }
@@ -535,10 +546,13 @@ public class Game {
                 
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
-                        if (map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR")) {
+                        if (map[i][j].name().startsWith("WALL") || map[i][j].name().startsWith("DOOR") || map[i][j].name().startsWith("TORCH")) {
                             if (map[i][j].name().startsWith("DOOR")) {
                                 g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                                 g.drawImage(interactables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            } else if (map[i][j].name().startsWith("TORCH")) {
+                                g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                                g.drawImage(animables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             } else {
                                 Image curr = Sprite.getImageAt(map[i][j]);
                                 g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);

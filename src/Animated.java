@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author huangl16
- */
+import java.awt.Image;
+
 public interface Animated {
-    
+    void animate();
+    Image getImage();
+    int getX();
+    int getY();
 }
