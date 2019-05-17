@@ -14,7 +14,7 @@ public class Sprite extends JComponent {
     
     public static final List<SpriteLoc> WALKABLE = Arrays.asList(SpriteLoc.FLOOR, SpriteLoc.DOOR4);
     public static final List<SpriteLoc> UNDERABLE = Arrays.asList(SpriteLoc.WALL_CORNER_BOTTOM, SpriteLoc.WALL_CORNER_TOP,
-                                                                  SpriteLoc.WALL_HORIZONTAL, SpriteLoc.WALL_VERTICAL, SpriteLoc.DOOR1);
+                                                                  SpriteLoc.WALL_HORIZONTAL, SpriteLoc.WALL_VERTICAL, SpriteLoc.DOOR1, SpriteLoc.WELL, SpriteLoc.STATUE);
     
     protected int x;
     protected int y;
@@ -125,7 +125,9 @@ public class Sprite extends JComponent {
     }
     
     public static Image getImageAt(SpriteLoc sl) {
+      if (sl!=null)
         return spriteSheet.getSubimage(sl.getX() * SPRITE_SIZE, sl.getY() * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
+      return null;
     }
     
     public static Image getImageAt(int xx, int yy) {
