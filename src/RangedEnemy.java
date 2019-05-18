@@ -75,6 +75,19 @@ public class RangedEnemy extends Enemy {
         else
           this.incY((int)(SPEED*dy/Math.abs(dy)));*/
     }
+    
+    @Override
+    public boolean willMove(boolean xDir) {
+        int dx = this.target.x-this.x;
+        int dy = this.target.y-this.y;
+        Location temp = new Location(loc.getX(), loc.getY());
+        temp.translate(SPEED*dx/Math.sqrt(dx*dx+dy*dy),SPEED*dy/Math.sqrt(dx*dx+dy*dy));
+        if (xDir && Math.abs(dx) > 0 && this.canSetX((int)temp.getX()))
+            return true;
+        if (!xDir && Math.abs(dy) > 0 && this.canSetY((int)temp.getY()))
+            return true;
+        return false;
+    }
    
     
 }

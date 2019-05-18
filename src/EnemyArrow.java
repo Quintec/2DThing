@@ -12,30 +12,30 @@ public class EnemyArrow extends Weapon {
 
    @Override
     protected Object doInBackground() throws Exception {
-        for (int i = 1; i < 54; i++) {
+        for (int i = 1; i < 162; i++) {
             if (i == 1) {
                 this.init();
 
             }
             else {
               if (this.dir == Character.DOWN) {
-                if (!this.wep.incY(3))
+                if (!this.wep.incY(1))
                     return null;
               }
               else if (this.dir == Character.LEFT) {
-                if (!this.wep.incX(-3))
+                if (!this.wep.incX(-1))
                     return null;
               }
               else if (this.dir == Character.RIGHT) {
-                  if (!this.wep.incX(3))
+                  if (!this.wep.incX(1))
                       return null;
               }
               else if (this.dir == Character.UP) {
-                  if (!this.wep.incY(-3))
+                  if (!this.wep.incY(-1))
                       return null;
               }
               
-              if (i % 6 == 0) {
+              if (i % 18 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png", this.dir);
                }
@@ -51,7 +51,7 @@ public class EnemyArrow extends Weapon {
             }
             
             
-            try { Thread.sleep(10);} catch (InterruptedException ex) {}
+            try { Thread.sleep(3);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }

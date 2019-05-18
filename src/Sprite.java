@@ -12,7 +12,7 @@ public class Sprite extends JComponent {
     
     public static final int SPRITE_SIZE = 32;
     
-    public static final List<SpriteLoc> WALKABLE = Arrays.asList(SpriteLoc.FLOOR, SpriteLoc.DOOR4);
+    public static final List<SpriteLoc> WALKABLE = Arrays.asList(SpriteLoc.FLOOR, SpriteLoc.DOOR4,SpriteLoc.STAIRS_ENTER, SpriteLoc.STAIRS_EXIT);
     public static final List<SpriteLoc> UNDERABLE = Arrays.asList(SpriteLoc.WALL_CORNER_BOTTOM, SpriteLoc.WALL_CORNER_TOP,
                                                                   SpriteLoc.WALL_HORIZONTAL, SpriteLoc.WALL_VERTICAL, SpriteLoc.DOOR1, SpriteLoc.WELL, SpriteLoc.STATUE);
     
@@ -228,6 +228,20 @@ public class Sprite extends JComponent {
             return true;
         }
         return false;
+    }
+    
+    public boolean canSetX(int ax) {
+        return 0 <= ax && ax <= Game.BOARD_WIDTH - this.width  && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][(y + 18)/SPRITE_SIZE]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 26)/SPRITE_SIZE][(y - 18)/SPRITE_SIZE + 1]))
+                                                            && (WALKABLE.contains(Game.map[(ax + 6)/SPRITE_SIZE][(y - 18)/SPRITE_SIZE + 1]));
+    }
+    
+    public boolean canSetY(int ay) {
+        return 0 <= ay && ay <= Game.BOARD_HEIGHT - this.height && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE]))
+                                                             && (WALKABLE.contains(Game.map[(x + 6)/SPRITE_SIZE][(ay - 18)/SPRITE_SIZE + 1]))
+                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][(ay + 18)/SPRITE_SIZE]))
+                                                             && (WALKABLE.contains(Game.map[(x + 26)/SPRITE_SIZE][(ay - 18)/SPRITE_SIZE + 1]));
     }
     
     public boolean incY(int ny) {

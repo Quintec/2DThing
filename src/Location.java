@@ -14,6 +14,10 @@ public class Location
     y = p.getY();
   }
   
+  public Point getPoint() {
+      return new Point((int)x, (int)y);
+  }
+  
   public double getX()
   {
     return x;

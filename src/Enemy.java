@@ -80,4 +80,6 @@ public abstract class Enemy extends Character {
     {
      return prevLoc;
     }
+    
+    public abstract boolean willMove(boolean xDir);
 }

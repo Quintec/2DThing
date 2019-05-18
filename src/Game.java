@@ -96,7 +96,7 @@ public class Game {
         hpLabel.setForeground(Color.WHITE);
         hpBar.add(hpLabel);
 
-        main = new Character(64, 64, SpriteLoc.BOY);
+        main = new Character(64, 32, SpriteLoc.BOY);
         mapPanel.add(main);
 
         enemies = new HashSet<Enemy>();
@@ -252,6 +252,9 @@ public class Game {
                 }
             }
         }
+        if (mapX != 0)
+            map[1][1] = SpriteLoc.STAIRS_ENTER;
+        map[w - 2][h - 2] = SpriteLoc.STAIRS_EXIT;
     }
     private void initBindings() {
         keys = new HashSet<Integer>();
@@ -416,8 +419,15 @@ public class Game {
               a.animate();
           try {
             ArrayList<Enemy> tempEnemies = new ArrayList<Enemy>();
-          if (main.x>32*(map.length-1.2))
+            int w = BOARD_WIDTH / 32;
+            int h = BOARD_HEIGHT / 32;
+           /* System.out.println("w: " + w);
+            System.out.println("mx: " + main.getX());
+            System.out.println("h: " + h);
+            System.out.println("my: " + main.getY());*/
+          if ((main.getX() + 16) / 32 == w - 2 && (main.getY() + 16) / 32 == h - 2)
           {
+             // System.out.println("next");
             animables.clear();
             interactables.clear();
             for (Enemy e : enemies)
@@ -432,10 +442,11 @@ public class Game {
              mapPanel.remove(e);
              enemies.remove(e);
             }
-            main.x = 16;
+            main.setX(64);
+            main.setY(32);
             
           }
-          else if (main.x<2)
+          else if (main.getX() / 32 <= 1 && main.getY() / 32 <= 1 && mapX > 0)
           {
             animables.clear();
             interactables.clear();
@@ -451,9 +462,11 @@ public class Game {
               mapPanel.remove(e);
               enemies.remove(e);
             }
-            main.x = (int)(32*(map.length-1.6));
+            main.setX(BOARD_WIDTH - 96);
+            main.setY(BOARD_HEIGHT - 64);
+            
           }
-          else if (main.y>32*(map[0].length-1.2))
+          /*else if (main.y>32*(map[0].length-1.2))
           {
             animables.clear();
             interactables.clear();
@@ -488,7 +501,7 @@ public class Game {
               enemies.remove(e);
             }
             main.y = (int)(32*(map[0].length-1.6));
-          }
+          }*/
           else 
           {
             //frame.revalidate();
@@ -660,7 +673,7 @@ public class Game {
                         } else if (map[i][j]!=null&&animables.containsKey(new Location(i, j))&&map[i][j].name().startsWith("TORCH")) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             g.drawImage(animables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                        } else if (map[i][j]!=null&&(map[i][j].name().startsWith("WELL")||map[i][j].name().startsWith("STATUE"))) {
+                        } else if (map[i][j]!=null&&(map[i][j].name().startsWith("WELL")||map[i][j].name().startsWith("STATUE")) || map[i][j].name().startsWith("STAIRS")) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             g.drawImage(Sprite.getImageAt(map[i][j]), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         }else {
@@ -681,6 +694,11 @@ public class Game {
                         }
                         if (map[i][j]!=null&&(map[i][j].name().startsWith("WELL")||map[i][j].name().startsWith("STATUE"))) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                        }
+                        if (map[i][j].name().startsWith("STAIRS")) {
+                            g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
+                            Image curr = Sprite.getImageAt(map[i][j]);
+                            g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         }
                        //System.out.println("drawn " + i + ", " + j);
                     }
