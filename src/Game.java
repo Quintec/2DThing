@@ -619,12 +619,11 @@ public class Game {
                     for (int j = 0; j < map[0].length; j++) {
                         if (map[i][j]!=null&&map[i][j].name().startsWith("DOOR")) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                            g.drawImage(interactables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                            
+                            g.drawImage(interactables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);       
                         } else if (map[i][j]!=null&&map[i][j].name().startsWith("TORCH")) {
                             g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             g.drawImage(animables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                        } else {
+                        } else if (map[i][j]!=null){
                             Image curr = Sprite.getImageAt(map[i][j]);
                             g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                         }
@@ -669,7 +668,7 @@ public class Game {
                             } else if (map[i][j]!=null&&map[i][j].name().startsWith("TORCH")) {
                                 g.drawImage(Sprite.getImageAt(SpriteLoc.FLOOR), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                                 g.drawImage(animables.get(new Location(i, j)).getImage(), i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
-                            } else {
+                            } else if (map[i][j]!=null){
                                 Image curr = Sprite.getImageAt(map[i][j]);
                                 g.drawImage(curr, i * Sprite.SPRITE_SIZE, j * Sprite.SPRITE_SIZE, null);
                             }
