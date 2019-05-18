@@ -20,19 +20,19 @@ public class Arrow extends Weapon {
             }
             else {
               if (this.dir == Character.DOWN) {
-                if (!this.wep.incY(3))
+                if (!this.wep.incY(1))
                     return null;
               }
               else if (this.dir == Character.LEFT) {
-                if (!this.wep.incX(-3))
+                if (!this.wep.incX(-1))
                     return null;
               }
               else if (this.dir == Character.RIGHT) {
-                  if (!this.wep.incX(3))
+                  if (!this.wep.incX(1))
                       return null;
               }
               else if (this.dir == Character.UP) {
-                  if (!this.wep.incY(-3))
+                  if (!this.wep.incY(-1))
                       return null;
               }
                 /*if (i % 9 == 0) {
@@ -44,7 +44,7 @@ public class Arrow extends Weapon {
                 return null;
             }
             
-            try { Thread.sleep(10);} catch (InterruptedException ex) {}
+            try { Thread.sleep(3);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }

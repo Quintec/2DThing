@@ -9,44 +9,44 @@ public class Boomerang extends Weapon {
 
     @Override
     protected Object doInBackground() throws Exception {
-        int dist = 50;
-        for (int i = 0; i < 50; i++) {
+        int dist = 150;
+        for (int i = 0; i < 150; i++) {
             if (i == 0) {
                 this.init();
                 this.checkHits();
             }
             else {
                 if (this.dir == Character.DOWN) {
-                if (!this.wep.incY(3)) {
+                if (!this.wep.incY(1)) {
                     dist = i;
                     break;
                 }
               }
               else if (this.dir == Character.LEFT) {
-                if (!this.wep.incX(-3)) {
+                if (!this.wep.incX(-1)) {
                     dist = i;
                     break;
                 }
               }
               else if (this.dir == Character.RIGHT) {
-                  if (!this.wep.incX(3)) {
+                  if (!this.wep.incX(1)) {
                     dist = i;
                     break;
                 }
               }
               else if (this.dir == Character.UP) {
-                  if (!this.wep.incY(-3)) {
+                  if (!this.wep.incY(-1)) {
                     dist = i;
                     break;
                 }
               }
-                if (i % 10 == 0) {
+                if (i % 30 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png");
                 }
             }
             this.checkHits();
-            try { Thread.sleep(10);} catch (InterruptedException ex) {}
+            try { Thread.sleep(3);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }
@@ -61,29 +61,29 @@ public class Boomerang extends Weapon {
 
         for (int i = dist; i >= 0; i--) {
             if (this.dir == Character.DOWN) {
-                if (!this.wep.incY(-3))
+                if (!this.wep.incY(-1))
                     return null;
               }
               else if (this.dir == Character.LEFT) {
-                if (!this.wep.incX(3))
+                if (!this.wep.incX(1))
                     return null;
               }
               else if (this.dir == Character.RIGHT) {
-                  if (!this.wep.incX(-3))
+                  if (!this.wep.incX(-1))
                       return null;
               }
               else if (this.dir == Character.UP) {
-                  if (!this.wep.incY(3))
+                  if (!this.wep.incY(1))
                       return null;
               }
-            if (i % 10 == 0) {
+            if (i % 30 == 0) {
                 this.stage++;
                 this.wep.setImage(this.type + this.stage + ".png");
             }
             if (this.checkHits())
                 return null;
             
-            try { Thread.sleep(10);} catch (InterruptedException ex) {}
+            try { Thread.sleep(3);} catch (InterruptedException ex) {}
             this.parent.revalidate();
             this.parent.repaint();
         }

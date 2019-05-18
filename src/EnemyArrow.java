@@ -61,9 +61,8 @@ public class EnemyArrow extends Weapon {
     @Override
     protected boolean checkHits() {
         Rectangle me = this.wep.getBounds();
-        me.grow(-12, 0);
-        me.translate(6,0);
-        Iterator<Enemy> it = Game.enemies.iterator();
+        //me.grow(-12, 0);
+        //me.translate(6,0);
         if (Game.main.getBounds().intersects(me))
         {
           Game.main.incHP(-this.getDmg());
