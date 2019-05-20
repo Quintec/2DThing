@@ -55,9 +55,13 @@ public class Arrow extends Weapon {
         Rectangle me = this.wep.getBounds();
         me.grow(-12, 0);
         Iterator<Enemy> it = Game.enemies.iterator();
+        //System.out.println(me);
         while (it.hasNext()) {
             Enemy e = it.next();
             if (e.getBounds().intersects(me)) {
+             //   System.out.println(e.getBounds());
+               // System.out.println(e.getX() + ", " + e.getY());
+               
                 //System.out.println("arrow hit");
                // System.out.println(this.getDmg());
                 e.incHP(-this.getDmg());
@@ -66,6 +70,7 @@ public class Arrow extends Weapon {
                     it.remove();
                     this.parent.remove(e);
                     Game.mapPanel.unders.remove(e);
+                    e.death();
                 }
                 
                 return true;

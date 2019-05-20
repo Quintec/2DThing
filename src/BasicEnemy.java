@@ -73,6 +73,7 @@ public class BasicEnemy extends Enemy {
     public boolean willMove(boolean xDir) {
         int dx = this.target.x-this.x;
         int dy = this.target.y-this.y;
+        
         Location temp = new Location(loc.getX(), loc.getY());
         temp.translate(SPEED*dx/Math.sqrt(dx*dx+dy*dy),SPEED*dy/Math.sqrt(dx*dx+dy*dy));
         if (xDir && Math.abs(dx) > 0 && this.canSetX((int)temp.getX()) && !overlapsOtherEnemies())
@@ -82,5 +83,8 @@ public class BasicEnemy extends Enemy {
         return false;
     }
    
-    
+    @Override
+    public void death() {
+        Game.gold += 2;
+    }
 }

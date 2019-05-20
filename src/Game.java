@@ -10,6 +10,8 @@ public class Game {
     public static JFrame frame;
     public static Map mapPanel;
     private JPanel control;
+    private JPanel info;
+    private JPanel underPanel;
     private DrawPanel pad;
     private MPBar mpBar;
     private HPBar hpBar;
@@ -19,6 +21,8 @@ public class Game {
     public static Character main;
     private int mapX;
     private int mapY;
+    
+    public static int gold;
 
     private static final int IM = JComponent.WHEN_FOCUSED;
 
@@ -70,6 +74,7 @@ public class Game {
                 map[i][j] = SpriteLoc.FLOOR;
             }
         }*/
+        gold = 0;
         new Game().start();
     }
 
@@ -81,7 +86,23 @@ public class Game {
         
         frame = new JFrame();
         mapPanel = new Map();
-        control = new JPanel();
+        control = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(DRAW_HEIGHT, DRAW_HEIGHT + 2 * BAR_HEIGHT );
+            }
+        };
+        underPanel = new JPanel();
+        
+        info = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(24 * 32 - DRAW_HEIGHT, DRAW_HEIGHT);
+            }
+        };
+        
+        info.add(new JLabel("This exists right"));
+        info.setBackground(Color.RED);
         pad = new DrawPanel();
 
         mpBar = new MPBar();
@@ -116,13 +137,17 @@ public class Game {
         control.add(mpBar);
         control.add(hpBar);
         
+        //underPanel.setBackground(Color.WHITE);
+        underPanel.add(control, BorderLayout.WEST);
+        underPanel.add(info, BorderLayout.CENTER);
+        
         mapX = 0;
         mapY = 0;
         initMap("map"+mapX+","+mapY+".txt");
         //initMap();
         
         frame.setSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + DRAW_HEIGHT + 2 * BAR_HEIGHT + 15 + 12));
-        frame.getContentPane().add(control, BorderLayout.SOUTH);
+        frame.getContentPane().add(underPanel, BorderLayout.SOUTH);
         frame.getContentPane().add(mapPanel, BorderLayout.NORTH);
         //frame.getContentPane().add(main);
        
@@ -391,24 +416,23 @@ public class Game {
             Rectangle me = main.getBounds();//TODO: REDO BOUNDS
             me.grow(-6, 0);
             
-          for (Enemy e: enemies)
-          {
-            e.update();
-            boolean intersected = false;
-            Rectangle re = e.getBounds();
-            
-            if (re.intersects(me))
-            {
-              intersected = true;
-              if (time % DAMAGE_FRAMES == 0) {
-                main.incHP(-e.getHitDmg());
-              }
-            }
-            /*if (e.overlapsOtherEnemies()||intersected)
-            {
-              e.moveTo(e.getPrevLoc());
-            }*/
-          }
+            enemies.stream().map((e) -> {
+                e.update();
+                return e;
+            }).forEachOrdered((e) -> {
+                boolean intersected = false;
+                Rectangle re = e.getBounds();
+                /*if (e.overlapsOtherEnemies()||intersected)
+                {
+                e.moveTo(e.getPrevLoc());
+                }*/
+                if (re.intersects(me)) {
+                    intersected = true;
+                    if (time % DAMAGE_FRAMES == 0) {
+                        main.incHP(-e.getHitDmg());
+                    }
+                }
+            });
          
           if (main.getHP() <= 0) {
               mapPanel.remove(main);
@@ -639,7 +663,7 @@ public class Game {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
+            return new Dimension(DRAW_HEIGHT, BAR_HEIGHT);
         }
     }
     
@@ -764,7 +788,7 @@ public class Game {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(BOARD_WIDTH, BAR_HEIGHT);
+            return new Dimension(DRAW_HEIGHT, BAR_HEIGHT);
         }
     }
 
@@ -777,10 +801,25 @@ public class Game {
             this.addMouseListener(ml);
             this.addMouseMotionListener(ml);
         }
+        
+        public void startDraw() {
+            new FastDraw().execute();
+        }
+        
+        private class FastDraw extends SwingWorker<Object, Object> {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                while (true) {
+                    DrawPanel.this.repaint();
+                }
+            }
+            
+        }
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(BOARD_WIDTH, DRAW_HEIGHT);
+            return new Dimension(DRAW_HEIGHT, DRAW_HEIGHT);
         }
 
         @Override
@@ -825,7 +864,7 @@ public class Game {
 
             public boolean finishedShape() {
                 if (!stillClicking) {
-                    if (clicked.size() > 3) {
+                    if (clicked.size() > 1) {
                         return true;
                     } else {
                         clicked.clear();

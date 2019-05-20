@@ -75,6 +75,7 @@ public class Ring extends Weapon {
                     it.remove();
                     this.parent.remove(e);
                     Game.mapPanel.unders.remove(e);
+                    e.death();
                 }
             }
         }

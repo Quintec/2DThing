@@ -89,5 +89,8 @@ public class RangedEnemy extends Enemy {
         return false;
     }
    
-    
+   @Override
+    public void death() {
+        Game.gold += 3;
+    }
 }

@@ -285,6 +285,11 @@ public class Sprite extends JComponent {
     }
     
     @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+    
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(img.getWidth(null), img.getHeight(null));
     }

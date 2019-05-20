@@ -36,6 +36,8 @@ public abstract class Enemy extends Character {
         g2.setStroke(new BasicStroke(0.5f));
         g2.drawRect(2, 0, SPRITE_SIZE - 4, 4);
         
+       // System.out.println(this.getBounds());
+        
         /*Graphics gg = this.getParent().getGraphics();
         gg.setColor(Color.RED);
         gg.drawRect(this.x, this.y - 10, SPRITE_SIZE, 5);
@@ -80,6 +82,10 @@ public abstract class Enemy extends Character {
     {
      return prevLoc;
     }
+    
+    
+    
+    public abstract void death();
     
     public abstract boolean willMove(boolean xDir);
 }
