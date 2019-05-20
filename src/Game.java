@@ -15,14 +15,18 @@ public class Game {
     private DrawPanel pad;
     private MPBar mpBar;
     private HPBar hpBar;
+    private XPBar xpBar;
     private JLabel mpLabel;
     private JLabel hpLabel;
+    private JLabel xpLabel;
     
     public static Character main;
     private int mapX;
     private int mapY;
     
     public static int gold;
+    public static int xp;
+    public static int level;
 
     private static final int IM = JComponent.WHEN_FOCUSED;
 
@@ -53,12 +57,18 @@ public class Game {
     //public static final int DRAW_WIDTH = 300;
     public static final int DRAW_HEIGHT = 300;
     public static final int BAR_HEIGHT = 30;
+    public static final int DRAW_WIDTH = 500;
 
     public static final Color MP_BG = new Color(128, 159, 255);
     public static final Color MP_FILL = new Color(0, 64, 255);
 
     public static final Color HP_BG = new Color(255, 128, 128);
     public static final Color HP_FILL = new Color(255, 0, 0);
+    
+    public static final Color XP_BG = new Color(128, 128, 128);
+    public static final Color XP_FILL = new Color(34, 139, 34);
+    
+    public static final int[] XP_LEVELS = new int[]{0, 10, 15, 20, 25, 30, 40, 50};
     
     public static SpriteLoc[][] map;
     
@@ -83,39 +93,57 @@ public class Game {
         shape = -1;
         comboTime = 0;
         drawingSecond = false;
+        level = 1;
         
         frame = new JFrame();
         mapPanel = new Map();
         control = new JPanel() {
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(DRAW_HEIGHT, DRAW_HEIGHT + 2 * BAR_HEIGHT );
+                return new Dimension(DRAW_WIDTH, DRAW_HEIGHT + 2 * BAR_HEIGHT );
             }
         };
-        underPanel = new JPanel();
+        underPanel = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(BOARD_WIDTH, DRAW_HEIGHT + 2 * BAR_HEIGHT );
+            }
+        };
         
         info = new JPanel() {
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(24 * 32 - DRAW_HEIGHT, DRAW_HEIGHT);
+                return new Dimension(24 * 32 - DRAW_WIDTH - 12, DRAW_HEIGHT + 2 * BAR_HEIGHT);
             }
+            
         };
         
-        info.add(new JLabel("This exists right"));
-        info.setBackground(Color.RED);
+        JLabel title = new JLabel("Stuff");
+        title.setFont(new Font("Courier New", Font.BOLD, 16));
+        info.add(title);
+        
         pad = new DrawPanel();
 
         mpBar = new MPBar();
         mpLabel = new JLabel("MP: " + Character.MAX_MP + "/" + Character.MAX_MP);
-        mpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+        mpLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
         mpLabel.setForeground(Color.WHITE);
         mpBar.add(mpLabel);
 
         hpBar = new HPBar();
         hpLabel = new JLabel("HP: " + Character.MAX_HP + "/" + Character.MAX_HP);
-        hpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+        hpLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
         hpLabel.setForeground(Color.WHITE);
         hpBar.add(hpLabel);
+        
+        xpBar = new XPBar();
+        xpLabel = new JLabel(" XP: " + Game.xp + "/" + Game.XP_LEVELS[level]);
+        xpLabel.setFont(new Font("Pixelated", Font.PLAIN, 14));
+        xpBar.setLayout(new BorderLayout());
+        xpBar.add(xpLabel, BorderLayout.CENTER);
+        
+        info.add(xpBar);
+
 
         main = new Character(64, 32, SpriteLoc.BOY);
         mapPanel.add(main);
@@ -129,6 +157,11 @@ public class Game {
         tb.setTitleJustification(TitledBorder.CENTER);
         tb.setTitleFont(new Font("Courier New", Font.BOLD, 16));
         pad.setBorder(tb);
+        
+        TitledBorder tb2 = BorderFactory.createTitledBorder(b, "Character Info");
+        tb2.setTitleJustification(TitledBorder.CENTER);
+        tb2.setTitleFont(new Font("Courier New", Font.BOLD, 16));
+        info.setBorder(tb2);
        // pad.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),
         //        BorderFactory.createLoweredBevelBorder()));
 
@@ -663,7 +696,7 @@ public class Game {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(DRAW_HEIGHT, BAR_HEIGHT);
+            return new Dimension(DRAW_WIDTH, BAR_HEIGHT);
         }
     }
     
@@ -783,12 +816,29 @@ public class Game {
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
             g.setColor(HP_FILL);
             g.fillRect(0, 0, (int) (main.getHP() * 1.0 / Character.MAX_HP * this.getWidth()), this.getHeight());
-            hpLabel.setText("HP: " + main.getHP() + "/" + Character.MAX_HP);
+            hpLabel.setText(" HP: " + main.getHP() + "/" + Character.MAX_HP);
         }
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(DRAW_HEIGHT, BAR_HEIGHT);
+            return new Dimension(DRAW_WIDTH, BAR_HEIGHT);
+        }
+    }
+    
+    private class XPBar extends JPanel {
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            g.setColor(XP_BG);
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g.setColor(XP_FILL);
+            g.fillRect(0, 0, (int) (Game.xp * 1.0 / Game.XP_LEVELS[level] * this.getWidth()), this.getHeight());
+            xpLabel.setText(" XP: " + Game.xp + "/" + Game.XP_LEVELS[level]);
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(24 * 32 - DRAW_WIDTH - 32, BAR_HEIGHT / 2);
         }
     }
 
