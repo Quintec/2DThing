@@ -8,7 +8,7 @@ public class RangedEnemy extends Enemy {
   private final int COOL_DOWN = 200;
 
     public RangedEnemy(int xc, int yc, SpriteLoc sl, Character main, Set<Enemy> en) {
-        super(xc, yc, sl, main, 10, 30, en);
+        super(xc, yc, sl, main, 10, 25, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
         coolDown = COOL_DOWN;
@@ -91,12 +91,13 @@ public class RangedEnemy extends Enemy {
     }
     
     @Override
-    public void death() {
+    public void death(Iterator<Enemy> it) {
         Game.gold += 5;
         Game.xp += 5;
         this.dead = true;
        
         new DeathWorker().execute();
+        it.remove();
     }
     
     private class DeathWorker extends SwingWorker<Object, Object> {

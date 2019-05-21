@@ -134,6 +134,10 @@ public class Sprite extends JComponent {
         return spriteSheet.getSubimage(xx * SPRITE_SIZE, yy * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
     }
     
+    public boolean isUnder() {
+        return under;
+    }
+    
     public int getX() {
         return x;
     }

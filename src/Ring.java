@@ -43,14 +43,26 @@ public class Ring extends Weapon {
         
         Location l = Game.main.getGridLoc();
         adj.add(l);
+        
+        
+        if (Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) - 1][(int)(l.getY()) - 1]))
+            adj.add(l.getTranslated(-1, -1));
+        if (Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY()) - 1]))
+            adj.add(l.getTranslated(0, -1));
+        if (Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) + 1][(int)(l.getY()) - 1]))
+            adj.add(l.getTranslated(1, -1));
+    
+        
         adj.add(l.getTranslated(1, 0));
         adj.add(l.getTranslated(-1, 0));
-        adj.add(l.getTranslated(0, 1));
-        adj.add(l.getTranslated(0, -1));
-        adj.add(l.getTranslated(-1, -1));
-        adj.add(l.getTranslated(-1, 1));
-        adj.add(l.getTranslated(1, 1));
-        adj.add(l.getTranslated(1, -1));
+        
+        if (!Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY()) + 1]))
+            adj.add(l.getTranslated(0, 1));
+        if (!Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) - 1][(int)(l.getY()) + 1]))
+            adj.add(l.getTranslated(-1, 1));
+        if (!Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) + 1][(int)(l.getY()) + 1]))
+            adj.add(l.getTranslated(1, 1));
+        
         
         /*Location l = new Location(Game.main.getLocation());
         System.out.println(l);
@@ -72,8 +84,7 @@ public class Ring extends Weapon {
                 e.incHP((int)(-this.getDmg() * Game.DAMAGE_MULTIPLIER));
                 this.hits.add(e);
                 if (e.getHP() <= 0) {
-                    it.remove();
-                    e.death();
+                    e.death(it);
                 }
             }
         }

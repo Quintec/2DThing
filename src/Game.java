@@ -99,6 +99,9 @@ public class Game {
         }*/
         UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(  
           "Pixelated", Font.PLAIN, 18)));
+        
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(  
+          "Pixelated", Font.PLAIN, 18)));
         gold = 0;
         xpPts = 0;
         new Game().start();
@@ -158,10 +161,17 @@ public class Game {
             }
         };
         
-        info = new JPanel() {
+        JPanel rightUnder = new JPanel() {
             @Override
             public Dimension getPreferredSize() {
                 return new Dimension(24 * 32 - DRAW_WIDTH - 12, DRAW_HEIGHT + 2 * BAR_HEIGHT);
+            }
+        };
+        
+        info = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(24 * 32 - DRAW_WIDTH - 12, 120);
             }
         };
         
@@ -188,17 +198,17 @@ public class Game {
         xpBar.add(xpLabel, BorderLayout.CENTER);
         
         JLabel title = new JLabel("Name: Maxwell\n");
-        title.setFont(new Font("Pixelated", Font.PLAIN, 16));
+        title.setFont(new Font("Pixelated", Font.BOLD, 18));
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
         //info.add(title);
         
         goldLabel = new JLabel("Gold: 0\n");
         goldLabel.setForeground(new Color(200, 160, 0));
-        goldLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
+        goldLabel.setFont(new Font("Pixelated", Font.BOLD, 16));
         goldLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         levelLabel = new JLabel("Level 1");
-        levelLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
+        levelLabel.setFont(new Font("Pixelated", Font.BOLD, 16));
         levelLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         
@@ -217,7 +227,7 @@ public class Game {
         main = new Character(64, 32, SpriteLoc.BOY);
         mapPanel.add(main);
 
-        enemies = new CopyOnWriteArraySet<Enemy>();
+        enemies = new HashSet<Enemy>();
         animables = new HashMap<Location, Animated>();
         
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
@@ -239,9 +249,12 @@ public class Game {
         control.add(mpBar);
         control.add(hpBar);
         
+        rightUnder.add(info);
+        rightUnder.add(new JLabel(new ImageIcon("guide.png")));
+        
         //underPanel.setBackground(Color.WHITE);
         underPanel.add(control, BorderLayout.WEST);
-        underPanel.add(info, BorderLayout.CENTER);
+        underPanel.add(rightUnder, BorderLayout.CENTER);
         
         mapX = 0;
         mapY = 0;
@@ -529,6 +542,10 @@ public class Game {
             
             while (ite.hasNext()) {
                 Enemy e = ite.next();
+                if (e.getHP() <= 0) {
+                    ite.remove();
+                    continue;
+                }
                 e.update();
                 boolean intersected = false;
                 Rectangle re = e.getBounds();

@@ -100,8 +100,7 @@ public class Boomerang extends Weapon {
                 e.incHP((int)(-this.getDmg() * Game.DAMAGE_MULTIPLIER));
                 this.hits.add(e);
                 if (e.getHP() <= 0) {
-                    it.remove();
-                    e.death();
+                    e.death(it);
                 }
             }
         }

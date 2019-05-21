@@ -67,8 +67,8 @@ public class Arrow extends Weapon {
                 e.incHP((int)(-this.getDmg() * Game.DAMAGE_MULTIPLIER));
               //  System.out.println(e.getHP());
                 if (e.getHP() <= 0) {
-                    it.remove();
-                    e.death();
+                    
+                     e.death(it);
                 }
                 
                 return true;

@@ -6,13 +6,13 @@ public class EnemyArrow extends Weapon {
     private boolean hit;
 
     public EnemyArrow(Character s, int d, Container jc) {
-        super("Fireball", 0, s, d, jc, 32, 32, 10);
+        super("Fireball", 0, s, d, jc, 32, 32, 15);
         this.hit = false;
     }
 
    @Override
     protected Object doInBackground() throws Exception {
-        for (int i = 1; i < 324; i++) {
+        for (int i = 1; i < 243; i++) {
             if (i == 1) {
                 this.init();
 
@@ -35,7 +35,7 @@ public class EnemyArrow extends Weapon {
                       return null;
               }
               
-              if (i % 36 == 0) {
+              if (i % 24 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png", this.dir);
                }

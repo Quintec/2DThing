@@ -7,7 +7,7 @@ public class BasicEnemy extends Enemy {
   
 
     public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, Set<Enemy> en) {
-        super(xc, yc, sl, main, 10, 50, en);
+        super(xc, yc, sl, main, 10, 30, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
 
@@ -85,12 +85,13 @@ public class BasicEnemy extends Enemy {
     }
    
     @Override
-    public void death() {
+    public void death(Iterator<Enemy> it) {
         Game.gold += 3;
-        Game.xp += 20;
+        Game.xp += 3;
         this.dead = true;
-       
+        //System.out.println("deded");
         new DeathWorker().execute();
+        
     }
     
     private class DeathWorker extends SwingWorker<Object, Object> {
@@ -102,6 +103,7 @@ public class BasicEnemy extends Enemy {
             BasicEnemy.this.repaint();
             
             try { Thread.sleep(500);} catch (InterruptedException ex) {}
+            //System.out.println("remove");
             BasicEnemy.this.getParent().remove(BasicEnemy.this);
             Game.mapPanel.unders.remove(BasicEnemy.this);
             return null;

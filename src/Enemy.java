@@ -85,7 +85,7 @@ public abstract class Enemy extends Character {
     
     
     
-    public abstract void death();
+    public abstract void death(Iterator<Enemy> it);
     
     public abstract boolean willMove(boolean xDir);
 }
