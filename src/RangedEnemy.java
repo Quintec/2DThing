@@ -1,13 +1,14 @@
 import java.util.*;
+import javax.swing.SwingWorker;
 
 public class RangedEnemy extends Enemy {
-  private final double SPEED = 0.5;
+  private final double SPEED = 0.75;
   private int currDir = -1;
   private int coolDown;
   private final int COOL_DOWN = 200;
 
     public RangedEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
-        super(xc, yc, sl, main, 10, 30, en);
+        super(xc, yc, sl, main, 10, 50, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
         coolDown = COOL_DOWN;
@@ -88,10 +89,26 @@ public class RangedEnemy extends Enemy {
             return true;
         return false;
     }
-   
-   @Override
+    
+    @Override
     public void death() {
         Game.gold += 3;
         Game.xp += 3;
+        this.dead = true;
+       
+        new DeathWorker().execute();
+    }
+    
+    private class DeathWorker extends SwingWorker<Object, Object> {
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            RangedEnemy.this.setImage(Sprite.getImageAt(SpriteLoc.DEAD_SKELETON));
+            try { Thread.sleep(500);} catch (InterruptedException ex) {}
+            RangedEnemy.this.getParent().remove(RangedEnemy.this);
+            Game.mapPanel.unders.remove(RangedEnemy.this);
+            return null;
+        }
+        
     }
 }

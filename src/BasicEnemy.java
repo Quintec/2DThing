@@ -1,4 +1,5 @@
 import java.util.*;
+import javax.swing.SwingWorker;
 
 public class BasicEnemy extends Enemy {
   private final double SPEED = 0.5;
@@ -87,5 +88,24 @@ public class BasicEnemy extends Enemy {
     public void death() {
         Game.gold += 2;
         Game.xp += 2;
+        this.dead = true;
+       
+        new DeathWorker().execute();
+    }
+    
+    private class DeathWorker extends SwingWorker<Object, Object> {
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            BasicEnemy.this.setImage(Sprite.getImageAt(SpriteLoc.DEAD_OOZE));
+            BasicEnemy.this.revalidate();
+            BasicEnemy.this.repaint();
+            
+            try { Thread.sleep(500);} catch (InterruptedException ex) {}
+            BasicEnemy.this.getParent().remove(BasicEnemy.this);
+            Game.mapPanel.unders.remove(BasicEnemy.this);
+            return null;
+        }
+        
     }
 }

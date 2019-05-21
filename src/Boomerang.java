@@ -101,8 +101,6 @@ public class Boomerang extends Weapon {
                 this.hits.add(e);
                 if (e.getHP() <= 0) {
                     it.remove();
-                    this.parent.remove(e);
-                    Game.mapPanel.unders.remove(e);
                     e.death();
                 }
             }

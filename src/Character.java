@@ -18,6 +18,8 @@ public class Character extends Sprite {
     private int mp;
     private int hp;
     
+    protected boolean dead;
+    
     private SpriteLoc loc;
 
     
@@ -30,15 +32,19 @@ public class Character extends Sprite {
         this.mp = MAX_MP;
         this.hp = MAX_HP;
         
+        this.dead = false;
+        
         this.loc = cl;
     }
     
     @Override
     protected void paintComponent(Graphics g) {
-        if (still) {
-            this.img = spriteSheet.getSubimage(SPRITE_SIZE * loc.getX(), SPRITE_SIZE * (loc.getY() + dir), SPRITE_SIZE, SPRITE_SIZE);
-        } else {
-            this.img = spriteSheet.getSubimage(SPRITE_SIZE * (loc.getX() + 1 + toggle), SPRITE_SIZE * (loc.getY() + dir), SPRITE_SIZE, SPRITE_SIZE);
+        if (!dead) {
+            if (still) {
+                this.img = spriteSheet.getSubimage(SPRITE_SIZE * loc.getX(), SPRITE_SIZE * (loc.getY() + dir), SPRITE_SIZE, SPRITE_SIZE);
+            } else {
+                this.img = spriteSheet.getSubimage(SPRITE_SIZE * (loc.getX() + 1 + toggle), SPRITE_SIZE * (loc.getY() + dir), SPRITE_SIZE, SPRITE_SIZE);
+            }
         }
         
         super.paintComponent(g);

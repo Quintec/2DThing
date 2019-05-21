@@ -68,8 +68,6 @@ public class Arrow extends Weapon {
               //  System.out.println(e.getHP());
                 if (e.getHP() <= 0) {
                     it.remove();
-                    this.parent.remove(e);
-                    Game.mapPanel.unders.remove(e);
                     e.death();
                 }
                 

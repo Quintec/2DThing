@@ -256,7 +256,7 @@ public class Game {
                         //mapPanel.add(t);
                         break;
                     case 'b':
-                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.GHOST, main, enemies);
+                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main, enemies);
                         enemies.add(en);
                         mapPanel.add(en);
                     default:
@@ -312,7 +312,7 @@ public class Game {
                         //mapPanel.add(t);
                         break;
                     case 'b':
-                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.GHOST, main, enemies);
+                        Enemy en = new BasicEnemy(j*Character.SPRITE_SIZE,i*Character.SPRITE_SIZE,SpriteLoc.OOZE, main, enemies);
                         enemies.add(en);
                         mapPanel.add(en);
                         map[j][i] = SpriteLoc.FLOOR;

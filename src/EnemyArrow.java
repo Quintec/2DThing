@@ -12,7 +12,7 @@ public class EnemyArrow extends Weapon {
 
    @Override
     protected Object doInBackground() throws Exception {
-        for (int i = 1; i < 162; i++) {
+        for (int i = 1; i < 324; i++) {
             if (i == 1) {
                 this.init();
 
@@ -35,7 +35,7 @@ public class EnemyArrow extends Weapon {
                       return null;
               }
               
-              if (i % 18 == 0) {
+              if (i % 36 == 0) {
                     this.stage++;
                     this.wep.setImage(this.type + this.stage + ".png", this.dir);
                }
