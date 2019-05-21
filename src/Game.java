@@ -19,6 +19,7 @@ public class Game {
     private JLabel mpLabel;
     private JLabel hpLabel;
     private JLabel xpLabel;
+    private static JLabel goldLabel;
     
     public static Character main;
     private int mapX;
@@ -87,6 +88,10 @@ public class Game {
         gold = 0;
         new Game().start();
     }
+    
+    public static void updateGold() {
+       goldLabel.setText("Gold: " + gold);
+    }
 
     public Game() throws IOException {
         time = 0;
@@ -106,7 +111,7 @@ public class Game {
         underPanel = new JPanel() {
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(BOARD_WIDTH, DRAW_HEIGHT + 2 * BAR_HEIGHT );
+                return new Dimension(BOARD_WIDTH, DRAW_HEIGHT + 2 * BAR_HEIGHT + 12);
             }
         };
         
@@ -115,10 +120,9 @@ public class Game {
             public Dimension getPreferredSize() {
                 return new Dimension(24 * 32 - DRAW_WIDTH - 12, DRAW_HEIGHT + 2 * BAR_HEIGHT);
             }
-            
         };
         
-        JLabel title = new JLabel("Stuff");
+        JLabel title = new JLabel("Important Text Aesthetic");
         title.setFont(new Font("Courier New", Font.BOLD, 16));
         info.add(title);
         
@@ -142,6 +146,10 @@ public class Game {
         xpBar.setLayout(new BorderLayout());
         xpBar.add(xpLabel, BorderLayout.CENTER);
         
+        goldLabel = new JLabel("Gold: 0");
+        goldLabel.setFont(new Font("Courier New", Font.PLAIN, 18));
+        
+        info.add(goldLabel);
         info.add(xpBar);
 
 
@@ -353,6 +361,7 @@ public class Game {
 
     public void start() {
         while (true) {
+            Game.updateGold();
             try {Thread.sleep(10);} catch (InterruptedException ex) {}
             if (keys.contains(Character.LEFT)) {
                 main.incX(-SPEED);
@@ -449,10 +458,11 @@ public class Game {
             Rectangle me = main.getBounds();//TODO: REDO BOUNDS
             me.grow(-6, 0);
             
-            enemies.stream().map((e) -> {
+            Iterator<Enemy> ite = enemies.iterator();
+            
+            while (ite.hasNext()) {
+                Enemy e = ite.next();
                 e.update();
-                return e;
-            }).forEachOrdered((e) -> {
                 boolean intersected = false;
                 Rectangle re = e.getBounds();
                 /*if (e.overlapsOtherEnemies()||intersected)
@@ -465,7 +475,8 @@ public class Game {
                         main.incHP(-e.getHitDmg());
                     }
                 }
-            });
+            }
+            
          
           if (main.getHP() <= 0) {
               mapPanel.remove(main);
@@ -474,6 +485,8 @@ public class Game {
           }
           for (Animated a : animables.values())
               a.animate();
+          
+          
           try {
             ArrayList<Enemy> tempEnemies = new ArrayList<Enemy>();
             int w = BOARD_WIDTH / 32;
