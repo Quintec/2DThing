@@ -7,7 +7,7 @@ public class BasicEnemy extends Enemy {
   
 
     public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
-        super(xc, yc, sl, main, 10, 30, en);
+        super(xc, yc, sl, main, 10, 50, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
 
@@ -86,8 +86,8 @@ public class BasicEnemy extends Enemy {
    
     @Override
     public void death() {
-        Game.gold += 2;
-        Game.xp += 2;
+        Game.gold += 3;
+        Game.xp += 3;
         this.dead = true;
        
         new DeathWorker().execute();

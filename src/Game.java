@@ -531,11 +531,12 @@ public class Game {
           {
             animables.clear();
             interactables.clear();
-            enemies.clear();
             for (Enemy e : enemies)
             {
              tempEnemies.add(e); 
             }
+            enemies.clear();
+            
             mapX--;
             initMap("map"+mapX+","+mapY+".txt");
             for (Enemy e : tempEnemies)

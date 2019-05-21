@@ -3,8 +3,8 @@ import java.lang.reflect.*;
 
 public class Character extends Sprite {
     
-    public static final int MAX_MP = 100;
-    public static final int MAX_HP = 100;
+    public static final int MAX_MP = 1000;
+    public static final int MAX_HP = 1000;
     
     public static final int DOWN = 0;
     public static final int LEFT = 1;

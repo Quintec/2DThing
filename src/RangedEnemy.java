@@ -8,7 +8,7 @@ public class RangedEnemy extends Enemy {
   private final int COOL_DOWN = 200;
 
     public RangedEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
-        super(xc, yc, sl, main, 10, 50, en);
+        super(xc, yc, sl, main, 10, 30, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
         coolDown = COOL_DOWN;
@@ -92,8 +92,8 @@ public class RangedEnemy extends Enemy {
     
     @Override
     public void death() {
-        Game.gold += 3;
-        Game.xp += 3;
+        Game.gold += 5;
+        Game.xp += 5;
         this.dead = true;
        
         new DeathWorker().execute();
