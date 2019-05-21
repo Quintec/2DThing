@@ -19,6 +19,7 @@ public class Game {
     private JLabel mpLabel;
     private JLabel hpLabel;
     private JLabel xpLabel;
+    private static JLabel levelLabel;
     private static JLabel goldLabel;
     
     public static Character main;
@@ -91,6 +92,11 @@ public class Game {
     
     public static void updateGold() {
        goldLabel.setText("Gold: " + gold);
+       if (xp >= XP_LEVELS[level]) {
+           xp -= XP_LEVELS[level];
+           level++;
+           levelLabel.setText("Level " + level);
+       }
     }
 
     public Game() throws IOException {
@@ -147,9 +153,13 @@ public class Game {
         xpBar.add(xpLabel, BorderLayout.CENTER);
         
         goldLabel = new JLabel("Gold: 0");
-        goldLabel.setFont(new Font("Courier New", Font.PLAIN, 18));
+        goldLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
+        
+        levelLabel = new JLabel("Level 1");
+        levelLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
         
         info.add(goldLabel);
+        info.add(levelLabel);
         info.add(xpBar);
 
 
