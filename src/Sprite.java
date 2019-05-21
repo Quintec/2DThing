@@ -214,6 +214,14 @@ public class Sprite extends JComponent {
         return incY(ay - y);
     }
     
+    public void actuallySetX(int ax) {
+        this.x = ax;
+    }
+    
+    public void actuallySetY(int ay) {
+        this.y = ay;
+    }
+    
     public boolean incX(int nx) {
         int ax = x + nx;
         

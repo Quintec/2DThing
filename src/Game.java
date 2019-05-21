@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.FontUIResource;
@@ -86,7 +88,7 @@ public class Game {
     private static HashMap<Location, Interactable> interactables;
     private static HashMap<Location, Animated> animables;
 
-    public static HashSet<Enemy> enemies;
+    public static Set<Enemy> enemies;
     
     public static void main(String[] args) throws IOException {
         /*map = new SpriteLoc[BOARD_HEIGHT / 32][BOARD_WIDTH / 32];
@@ -215,7 +217,7 @@ public class Game {
         main = new Character(64, 32, SpriteLoc.BOY);
         mapPanel.add(main);
 
-        enemies = new HashSet<Enemy>();
+        enemies = new CopyOnWriteArraySet<Enemy>();
         animables = new HashMap<Location, Animated>();
         
         Border b = BorderFactory.createStrokeBorder(new BasicStroke(3), new Color(139, 69, 19));//brown
@@ -571,6 +573,8 @@ public class Game {
             }
             enemies.clear();
             mapX++;
+             main.actuallySetX(64);
+            main.actuallySetY(32);
             initMap("map"+mapX+","+mapY+".txt");
             
             for (Enemy e : tempEnemies)
@@ -578,8 +582,7 @@ public class Game {
              mapPanel.remove(e);
              mapPanel.unders.remove(e);
             }
-            main.setX(64);
-            main.setY(32);
+           
             
           }
           else if (main.getX() / 32 <= 1 && main.getY() / 32 <= 1 && mapX > 0)
@@ -591,7 +594,8 @@ public class Game {
              tempEnemies.add(e); 
             }
             enemies.clear();
-            
+             main.actuallySetX(BOARD_WIDTH - 96);
+            main.actuallySetY(BOARD_HEIGHT - 64);
             mapX--;
             initMap("map"+mapX+","+mapY+".txt");
             for (Enemy e : tempEnemies)
@@ -599,9 +603,6 @@ public class Game {
               mapPanel.remove(e);
               mapPanel.unders.remove(e);
             }
-            main.setX(BOARD_WIDTH - 96);
-            main.setY(BOARD_HEIGHT - 64);
-            
           }
           /*else if (main.y>32*(map[0].length-1.2))
           {

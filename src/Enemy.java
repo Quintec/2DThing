@@ -4,14 +4,14 @@ import java.awt.*;
 public abstract class Enemy extends Character {
     
     public Character target;
-    public HashSet<Enemy> enemies;
+    public Set<Enemy> enemies;
     private int hitDmg;
     private int maxHP;
     
     protected Location loc;
     protected Location prevLoc;
     
-    public Enemy(int xc, int yc, SpriteLoc sl, Character main, int dmg, int hp, HashSet<Enemy> en) {
+    public Enemy(int xc, int yc, SpriteLoc sl, Character main, int dmg, int hp, Set<Enemy> en) {
         super(xc, yc, sl);
         this.target = main;
         this.hitDmg = dmg;

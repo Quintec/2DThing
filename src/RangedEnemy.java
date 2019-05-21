@@ -7,7 +7,7 @@ public class RangedEnemy extends Enemy {
   private int coolDown;
   private final int COOL_DOWN = 200;
 
-    public RangedEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
+    public RangedEnemy(int xc, int yc, SpriteLoc sl, Character main, Set<Enemy> en) {
         super(xc, yc, sl, main, 10, 30, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  

@@ -4,7 +4,7 @@ import java.lang.reflect.*;
 public class Character extends Sprite {
     
     public static int MAX_MP = 100;
-    public static int MAX_HP = 100;
+    public static int MAX_HP = 10000;
     
     public static final int DOWN = 0;
     public static final int LEFT = 1;

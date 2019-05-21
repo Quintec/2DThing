@@ -6,7 +6,7 @@ public class BasicEnemy extends Enemy {
   private int currDir = -1;
   
 
-    public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, HashSet<Enemy> en) {
+    public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, Set<Enemy> en) {
         super(xc, yc, sl, main, 10, 50, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
