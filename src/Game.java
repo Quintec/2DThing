@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.plaf.FontUIResource;
 
 public class Game {
 
@@ -28,6 +29,7 @@ public class Game {
     
     public static int gold;
     public static int xp;
+    public static int xpPts;
     public static int level;
 
     private static final int IM = JComponent.WHEN_FOCUSED;
@@ -47,8 +49,14 @@ public class Game {
     public static final int UP_LINE = 5;
 
     public static final int SPEED = 1;
-    public static final int REGEN_RATE = 1;
-    public static final int REGEN_TIME = 30;
+   // public static final int MP_REGEN_RATE = 1;
+    public static int MP_REGEN_TIME = 45;
+    public static int REGEN_RATE = 1;
+    public static int HP_REGEN_TIME = 45;
+    
+    public static double DAMAGE_MULTIPLIER = 1;
+    
+    
     public static final int DAMAGE_FRAMES = 30;
     public static final int TOGGLE_FRAMES = 12;
 
@@ -61,6 +69,7 @@ public class Game {
     public static final int BAR_HEIGHT = 30;
     public static final int DRAW_WIDTH = 500;
 
+
     public static final Color MP_BG = new Color(128, 159, 255);
     public static final Color MP_FILL = new Color(0, 64, 255);
 
@@ -70,7 +79,7 @@ public class Game {
     public static final Color XP_BG = new Color(128, 128, 128);
     public static final Color XP_FILL = new Color(34, 139, 34);
     
-    public static final int[] XP_LEVELS = new int[]{0, 10, 15, 20, 25, 30, 40, 50};
+    public static final int[] XP_LEVELS = new int[]{0, 10, 15, 20, 25, 30, 40, 50, 60, 80, 100};
     
     public static SpriteLoc[][] map;
     
@@ -86,16 +95,42 @@ public class Game {
                 map[i][j] = SpriteLoc.FLOOR;
             }
         }*/
+        UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(  
+          "Pixelated", Font.PLAIN, 18)));
         gold = 0;
+        xpPts = 0;
         new Game().start();
     }
     
     public static void updateGold() {
        goldLabel.setText("Gold: " + gold);
-       if (xp >= XP_LEVELS[level]) {
+       while (xp >= XP_LEVELS[level] && level < XP_LEVELS.length - 1) {
+           
            xp -= XP_LEVELS[level];
            level++;
+           xpPts++;
            levelLabel.setText("Level " + level);
+           String[] options = {"Max HP", "Max MP", "HP Regen", "MP Regen", "Damage"};
+           int option = JOptionPane.showOptionDialog(frame, "Level up! Pick a skill to upgrade", "Level Up", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+           switch (option) {
+               case 0:
+                   Character.MAX_HP = (int)(Character.MAX_HP * 1.1);
+                   break;
+               case 1:
+                   Character.MAX_MP = (int)(Character.MAX_MP * 1.1);
+                   break;
+               case 2:
+                   HP_REGEN_TIME = (int)(HP_REGEN_TIME * 0.9);
+                   break;
+               case 3:
+                   MP_REGEN_TIME = (int)(MP_REGEN_TIME * 0.9);
+                   break;
+               case 4:
+                   DAMAGE_MULTIPLIER *= 1.2;
+                   break;
+               default:
+                   throw new RuntimeException("I actually give up on life");
+           }
        }
     }
 
@@ -128,9 +163,7 @@ public class Game {
             }
         };
         
-        JLabel title = new JLabel("Important Text Aesthetic");
-        title.setFont(new Font("Courier New", Font.BOLD, 16));
-        info.add(title);
+        
         
         pad = new DrawPanel();
 
@@ -152,15 +185,31 @@ public class Game {
         xpBar.setLayout(new BorderLayout());
         xpBar.add(xpLabel, BorderLayout.CENTER);
         
-        goldLabel = new JLabel("Gold: 0");
+        JLabel title = new JLabel("Name: Maxwell\n");
+        title.setFont(new Font("Pixelated", Font.PLAIN, 16));
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+        //info.add(title);
+        
+        goldLabel = new JLabel("Gold: 0\n");
+        goldLabel.setForeground(new Color(200, 160, 0));
         goldLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
+        goldLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         levelLabel = new JLabel("Level 1");
         levelLabel.setFont(new Font("Pixelated", Font.BOLD, 18));
+        levelLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        info.add(goldLabel);
-        info.add(levelLabel);
+        
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+        textPanel.add(title);
+        textPanel.add(goldLabel);
+        textPanel.add(levelLabel);
+        
+        info.setLayout(new FlowLayout(FlowLayout.LEFT));
+        info.add(textPanel);
         info.add(xpBar);
+        
 
 
         main = new Character(64, 32, SpriteLoc.BOY);
@@ -204,6 +253,7 @@ public class Game {
        
         initBindings();
 
+        frame.setTitle("Doodle Dungeon");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
@@ -454,11 +504,16 @@ public class Game {
               drawingSecond = false;
             }
             
-            if (++time % REGEN_TIME == 0) {
+            if (++time % MP_REGEN_TIME == 0) {
                 main.incMP(REGEN_RATE);
+                
+            }
+            if (time % HP_REGEN_TIME == 0) {
+                main.incHP(REGEN_RATE);
+                
             }
             
-            if (time == TOGGLE_FRAMES * DAMAGE_FRAMES * REGEN_TIME)
+            if (time == TOGGLE_FRAMES * DAMAGE_FRAMES * MP_REGEN_TIME * HP_REGEN_TIME)
                 time = 0;
             
             if (time % TOGGLE_FRAMES == 0)

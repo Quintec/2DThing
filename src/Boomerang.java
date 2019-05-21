@@ -97,7 +97,7 @@ public class Boomerang extends Weapon {
             Enemy e = it.next();
             if (e.getBounds().intersects(me) && !this.hits.contains(e)) {
                 //System.out.println("boomerang hit");
-                e.incHP(-this.getDmg());
+                e.incHP((int)(-this.getDmg() * Game.DAMAGE_MULTIPLIER));
                 this.hits.add(e);
                 if (e.getHP() <= 0) {
                     it.remove();

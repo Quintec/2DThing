@@ -87,7 +87,7 @@ public class BasicEnemy extends Enemy {
     @Override
     public void death() {
         Game.gold += 3;
-        Game.xp += 3;
+        Game.xp += 20;
         this.dead = true;
        
         new DeathWorker().execute();
