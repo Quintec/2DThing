@@ -105,15 +105,19 @@ public class Game {
             }
         }*/
         UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(
-                "Pixelated", Font.PLAIN, 24)));
+                "Courier New", Font.BOLD, 24)));
 
         UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font(
-                "Pixelated", Font.PLAIN, 18)));
+                "Courier New", Font.BOLD, 18)));
         gold = 0;
         xpPts = 0;
         
+        while (true)
+        {
         game = new Game();
         game.start();
+        game.frame.setVisible(false);
+        }
     }
     
 
@@ -130,6 +134,41 @@ public class Game {
 
     public static void updateGold() {
         goldLabel.setText("Gold: " + gold);
+        if (level>=XP_LEVELS.length-1)
+        {
+          while (xp >= 10*level) {
+            //System.out.println(xp);
+            xp -= 10*level;
+            level++;
+            xpPts++;
+            levelLabel.setText("Level " + level);
+            String[] options = {"Max HP", "Max MP", "HP Regen", "MP Regen", "Damage"};
+
+            keys.clear();
+            int option = JOptionPane.showOptionDialog(frame, "Level up! Pick a skill to upgrade", "Level Up", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            switch (option) {
+                case 0:
+                    Character.MAX_HP = (int) (Character.MAX_HP * 1.1);
+                    break;
+                case 1:
+                    Character.MAX_MP = (int) (Character.MAX_MP * 1.1);
+                    break;
+                case 2:
+                    HP_REGEN_TIME = (int) (HP_REGEN_TIME * 0.9);
+                    break;
+                case 3:
+                    MP_REGEN_TIME = (int) (MP_REGEN_TIME * 0.9);
+                    break;
+                case 4:
+                    DAMAGE_MULTIPLIER *= 1.2;
+                    break;
+                default:
+                    throw new RuntimeException("I actually give up on life");
+            }
+        }
+        }
+          else 
+          {
         while (xp >= XP_LEVELS[level] && level < XP_LEVELS.length - 1) {
 
             xp -= XP_LEVELS[level];
@@ -160,6 +199,8 @@ public class Game {
                     throw new RuntimeException("I actually give up on life");
             }
         }
+    }
+        
     }
 
     public Game() throws IOException {
@@ -407,8 +448,8 @@ public class Game {
          String message = "";
             message += "You're stuck in a dungeon. Go up the stairs through all the levels to win!\n";
             message += "Movement: WASD\n";
-            message += "Attack the monsters using your trusty drawing pad. More details about attacks can be found at the bottom right of the screen.\n";
-            message += "Interact by pressing F. For example, press F to open doors and to move on to the next level when on the stairs.\n";
+            message += "Attack the monsters drawing symbols on your trusty drawing pad.\nMore details about attacks can be found at the bottom right of the screen.\n";
+            message += "Interact by pressing F.\nFor example, press F to open doors and to move on to the next level when on the stairs.\n";
             message += "Good luck!";
             
             JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
@@ -493,11 +534,19 @@ public class Game {
                 drawingSecond = false;
             }
 
-            if (++time % MP_REGEN_TIME == 0) {
+            if (MP_REGEN_TIME==0)
+            {
+              main.incMP(REGEN_RATE);
+            }
+            else if (++time % MP_REGEN_TIME == 0) {
                 main.incMP(REGEN_RATE);
 
             }
-            if (time % HP_REGEN_TIME == 0) {
+            if (HP_REGEN_TIME==0)
+            {
+              main.incHP(REGEN_RATE);
+            }
+            else if (time % HP_REGEN_TIME == 0) {
                 main.incHP(REGEN_RATE);
 
             }
@@ -514,10 +563,11 @@ public class Game {
             Rectangle me = main.getBounds();//TODO: REDO BOUNDS
             me.grow(-6, 0);
 
+            try {
             Iterator<Enemy> ite = enemies.iterator();
 
             while (ite.hasNext()) {
-                Enemy e = ite.next();
+                Enemy e = ite.next();//???
                 if (e.getHP() <= 0) {
                     ite.remove();
                     continue;
@@ -536,10 +586,16 @@ public class Game {
                     }
                 }
             }
+            }
+            catch (Exception e)
+            {
+              
+            }
 
             if (main.getHP() <= 0) {
                 mapPanel.remove(main);
                 frame.repaint();
+                JOptionPane.showMessageDialog(frame, "You have fallen in battle\nTry again by clicking ok", "You Died", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
             for (Animated a : animables.values()) {
@@ -548,6 +604,11 @@ public class Game {
 
             frame.repaint();
         
+            if (mapX==9&&enemies.size()==0)
+            {
+              JOptionPane.showMessageDialog(frame, "Congratulations! You cleared the dungeon.\nReset by clicking ok", "You Win", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
         }
     }
     
@@ -673,12 +734,16 @@ public class Game {
                     intersected = true;
                     if (time % DAMAGE_FRAMES == 0) {
                         main.incHP(-e.getHitDmg());
+                        //System.out.println("0");
                     }
                 }
             }
 
             if (main.getHP() <= 0) {
-                mapPanel.remove(main);
+              //System.out.println("1");
+               //JOptionPane.showMessageDialog(frame, "Try again by exiting and clicking run", "You Died", JOptionPane.INFORMATION_MESSAGE);
+               //System.out.println("2"); 
+               mapPanel.remove(main);
                 frame.repaint();
                 //break;
             }
@@ -686,6 +751,8 @@ public class Game {
                 a.animate();
             }
 
+
+            
             frame.repaint();
         
     }
@@ -1015,8 +1082,16 @@ public class Game {
             g.setColor(XP_BG);
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
             g.setColor(XP_FILL);
+            if (level>=XP_LEVELS.length-1)
+            {
+              g.fillRect(0, 0, (int) (Game.xp * 1.0 / (level*10) * this.getWidth()), this.getHeight());
+              xpLabel.setText(" XP: " + Game.xp + "/" + level*10);
+            }
+            else
+            {
             g.fillRect(0, 0, (int) (Game.xp * 1.0 / Game.XP_LEVELS[level] * this.getWidth()), this.getHeight());
             xpLabel.setText(" XP: " + Game.xp + "/" + Game.XP_LEVELS[level]);
+            }
         }
 
         @Override
