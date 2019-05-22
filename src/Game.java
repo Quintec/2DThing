@@ -551,144 +551,7 @@ public class Game {
         }
     }
     
-    public void play () {
-        frame.revalidate();
-            //System.out.println("trying");
-            Game.updateGold();
-           /* try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-            }*/
-            if (keys.contains(Character.LEFT)) {
-                main.incX(-SPEED);
-                if (!keys.contains(main.getDir())) {
-                    main.setDir(Character.LEFT);
-                }
-            }
-            if (keys.contains(Character.UP)) {
-                main.incY(-SPEED);
-                if (!keys.contains(main.getDir())) {
-                    main.setDir(Character.UP);
-                }
-            }
-            if (keys.contains(Character.RIGHT)) {
-                main.incX(SPEED);
-                if (!keys.contains(main.getDir())) {
-                    main.setDir(Character.RIGHT);
-                }
-            }
-            if (keys.contains(Character.DOWN)) {
-                main.incY(SPEED);
-                if (!keys.contains(main.getDir())) {
-                    main.setDir(Character.DOWN);
-                }
-            }
-
-            if (!drawingSecond && pad.ml.finishedShape()) {
-                shape = this.getShape(pad.ml.getDragged());
-                //System.out.println(shape);
-                if (shape == Game.CIRCLE) {
-                    main.fireWeapon("Ring");
-                } else if (shape == Game.RIGHT_LINE) {
-                    main.fireWeapon("Arrow", 2);
-                    comboTime = COMBO_TIME;
-                } else if (shape == Game.LEFT_LINE) {
-                    main.fireWeapon("Arrow", 1);
-                    comboTime = COMBO_TIME;
-                } else if (shape == Game.DOWN_LINE) {
-                    main.fireWeapon("Arrow", 0);
-                    comboTime = COMBO_TIME;
-                } else if (shape == Game.UP_LINE) {
-                    main.fireWeapon("Arrow", 3);
-                    comboTime = COMBO_TIME;
-                }
-            }
-
-            if (comboTime > 0) {
-                comboTime--;
-                if (pad.ml.isClicking()) {
-                    drawingSecond = true;
-                    comboTime = COMBO_TIME;
-                }
-            } else {
-                drawingSecond = false;
-            }
-
-            if (drawingSecond && pad.ml.finishedShape()) {
-                int shape2 = this.getShape(pad.ml.getDragged());
-                if (shape2 == CIRCLE) {
-                    main.fireWeapon("Boomerang", shape - 2);
-                } else if (shape2 == SQUARE) {
-                    main.fireWeapon("Arrow", 0);
-                    main.fireWeapon("Arrow", 1);
-                    main.fireWeapon("Arrow", 2);
-                    main.fireWeapon("Arrow", 3);
-                    //System.out.println("Square");
-                    main.incMP(20);
-                } else if (shape2 != -1) {
-                    main.fireWeapon("Arrow", shape2 - 2);
-                }
-
-                comboTime = 0;
-                drawingSecond = false;
-            }
-
-            if (++time % MP_REGEN_TIME == 0) {
-                main.incMP(REGEN_RATE);
-
-            }
-            if (time % HP_REGEN_TIME == 0) {
-                main.incHP(REGEN_RATE);
-
-            }
-
-            if (time == TOGGLE_FRAMES * DAMAGE_FRAMES * MP_REGEN_TIME * HP_REGEN_TIME) {
-                time = 0;
-            }
-
-            if (time % TOGGLE_FRAMES == 0) {
-                main.toggle();
-            }
-
-            main.setStill(keys.isEmpty());
-            Rectangle me = main.getBounds();//TODO: REDO BOUNDS
-            me.grow(-6, 0);
-
-            Iterator<Enemy> ite = enemies.iterator();
-
-            while (ite.hasNext()) {
-                Enemy e = ite.next();
-                if (e.getHP() <= 0) {
-                    ite.remove();
-                    continue;
-                }
-                e.update();
-                boolean intersected = false;
-                Rectangle re = e.getBounds();
-                /*if (e.overlapsOtherEnemies()||intersected)
-                {
-                e.moveTo(e.getPrevLoc());
-                }*/
-                if (re.intersects(me)) {
-                    intersected = true;
-                    if (time % DAMAGE_FRAMES == 0) {
-                        main.incHP(-e.getHitDmg());
-                    }
-                }
-            }
-
-            if (main.getHP() <= 0) {
-                mapPanel.remove(main);
-                frame.repaint();
-                //break;
-            }
-            for (Animated a : animables.values()) {
-                a.animate();
-            }
-
-            frame.repaint();
-        
-    }
+    
 
     public int getShape(ArrayList<Location> points) {
         double minX = Double.MAX_VALUE;
@@ -805,6 +668,7 @@ public class Game {
                     frame.repaint();
                 }
             } catch (IOException ee) {
+                ee.printStackTrace();
             }
 
             if (!changed) {
