@@ -2,7 +2,7 @@ import java.util.*;
 import javax.swing.SwingWorker;
 
 public class RangedEnemy extends Enemy {
-  private final double SPEED = 0.75;
+  private final double SPEED = 0.8;
   private int currDir = -1;
   private int coolDown;
   private final int COOL_DOWN = 200;

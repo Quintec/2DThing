@@ -2,12 +2,12 @@ import java.util.*;
 import javax.swing.SwingWorker;
 
 public class BasicEnemy extends Enemy {
-  private final double SPEED = 0.5;
+  private final double SPEED = 0.6;
   private int currDir = -1;
   
 
     public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, Set<Enemy> en) {
-        super(xc, yc, sl, main, 5, 40, en);
+        super(xc, yc, sl, main, 8, 40, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
 

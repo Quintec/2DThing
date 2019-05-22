@@ -27,12 +27,18 @@ public class Game {
     private JLabel mpLabel;
     private JLabel hpLabel;
     private JLabel xpLabel;
+    private JButton hpb;
+    private JButton mpb;
+    
     private static JLabel levelLabel;
     private static JLabel goldLabel;
 
     public static Character main;
     private int mapX;
     private int mapY;
+    
+    private int hppCount;
+    private int mppCount;
 
     public static int gold;
     public static int xp;
@@ -111,6 +117,7 @@ public class Game {
                 "Courier New", Font.BOLD, 18)));
         gold = 0;
         xpPts = 0;
+        
         
         while (true)
         {
@@ -208,6 +215,9 @@ public class Game {
         comboTime = 0;
         drawingSecond = false;
         level = 1;
+        
+        hppCount = 0;
+        mppCount = 0;
 
         frame = new JFrame();
         mapPanel = new Map();
@@ -277,9 +287,39 @@ public class Game {
         textPanel.add(title);
         textPanel.add(goldLabel);
         textPanel.add(levelLabel);
+        
+        JPanel aboveXp = new JPanel();
+        JPanel shop = new JPanel();
+        
+        JPanel hpp = new JPanel();
+        hpp.setLayout(new BoxLayout(hpp, BoxLayout.Y_AXIS));
+        
+        hpb = new JButton("0");
+        hpb.setFont(new Font("Pixelated", Font.BOLD, 16));
+        hpb.setIcon(new ImageIcon("hppotion.png"));
+        hpp.add(hpb);
+        hpb.setHorizontalTextPosition(AbstractButton.CENTER);
+        hpb.setVerticalTextPosition(AbstractButton.BOTTOM);
+        hpb.addActionListener(new HPPListener());
+        
+        JPanel mpp = new JPanel();
+        mpb = new JButton("0");
+        mpb.setFont(new Font("Pixelated", Font.BOLD, 16));
+        mpb.setIcon(new ImageIcon("mppotion.png"));
+        mpp.add(mpb);
+        mpb.setHorizontalTextPosition(AbstractButton.CENTER);
+        mpb.setVerticalTextPosition(AbstractButton.BOTTOM);
+        mpb.addActionListener(new MPPListener());
+        mpp.setLayout(new BoxLayout(mpp, BoxLayout.Y_AXIS));
+        
+        shop.add(hpp);
+        shop.add(mpp);
+        
+        aboveXp.add(textPanel);
+        aboveXp.add(shop);
 
         info.setLayout(new FlowLayout(FlowLayout.LEFT));
-        info.add(textPanel);
+        info.add(aboveXp);
         info.add(xpBar);
 
         main = new Character(64, 32, SpriteLoc.BOY);
@@ -333,6 +373,32 @@ public class Game {
         frame.setResizable(false);
         frame.setVisible(true);
         //System.out.println("constructed");
+    }
+    
+    private class HPPListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (hppCount > 0) {
+                hppCount--;
+                main.incHP(20);
+                hpb.setText(hppCount + "");
+            }
+        }
+        
+    }
+    
+    private class MPPListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (mppCount > 0) {
+                mppCount--;
+                main.incMP(20);
+                mpb.setText(mppCount + "");
+            }
+        }
+        
     }
 
     private void initMap(String fileName) throws IOException {
@@ -440,6 +506,23 @@ public class Game {
 
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("F"), "interact");
         main.getActionMap().put("interact", new InterAction());
+        
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("H"), "hppotion");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("M"), "mppotion");
+        main.getActionMap().put("hppotion", new ActionWrapper((e) -> {
+            if (gold >= 20) {
+                gold -= 20;
+                hppCount++;
+                hpb.setText(hppCount+"");
+            }
+        }));
+        main.getActionMap().put("mppotion", new ActionWrapper((e) -> {
+            if (gold >= 20) {
+                gold -= 20;
+                mppCount++;
+                mpb.setText(mppCount+"");
+            }
+        }));
     }
 
     public void start() {

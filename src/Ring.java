@@ -4,7 +4,7 @@ import java.util.*;
 public class Ring extends Weapon {
 
     public Ring(Character s, int d, Container jc) {
-        super("Ring", 20, s, d, jc, 144, 144, 20);
+        super("Ring", 25, s, d, jc, 144, 144, 20);
     }
 
     @Override

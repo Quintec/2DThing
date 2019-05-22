@@ -113,6 +113,8 @@ public class Character extends Sprite {
     public void incMP(int m) {
         if (mp + m <= MAX_MP)
             mp += m;
+        else
+            mp = MAX_MP;
     }
     
     public void setMP(int m) {
@@ -127,6 +129,8 @@ public class Character extends Sprite {
     public void incHP(int h) {
         if (hp + h <= MAX_HP)
             hp += h;
+        else
+            hp = MAX_HP;
     }
     
     public void setHP(int h) {
