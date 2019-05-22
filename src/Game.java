@@ -45,7 +45,7 @@ public class Game {
     public static int xpPts;
     public static int level;
 
-    private static final int IM = JComponent.WHEN_FOCUSED;
+    private static final int IM = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
     private static HashSet<Integer> keys;
     private int time;
@@ -244,7 +244,7 @@ public class Game {
         info = new JPanel() {
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(24 * 32 - DRAW_WIDTH - 12, 120);
+                return new Dimension(24 * 32 - DRAW_WIDTH - 12, 144);
             }
         };
 
@@ -383,6 +383,7 @@ public class Game {
                 hppCount--;
                 main.incHP(20);
                 hpb.setText(hppCount + "");
+                mapPanel.requestFocus();
             }
         }
         
@@ -396,6 +397,7 @@ public class Game {
                 mppCount--;
                 main.incMP(20);
                 mpb.setText(mppCount + "");
+                mapPanel.requestFocus();
             }
         }
         
@@ -534,6 +536,10 @@ public class Game {
             message += "Good luck!";
             
             JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
+            
+            message = "You can buy HP and MP potions by typing the H and M keys, respectively.\nEach potion costs 20 gold and restores 20 points.\nUse the potions by clicking on the icons in your character info.";
+            JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
+            
         while (true) {
             //System.out.println("trying");
             Game.updateGold();
