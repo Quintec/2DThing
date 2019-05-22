@@ -7,7 +7,7 @@ public class BasicEnemy extends Enemy {
   
 
     public BasicEnemy(int xc, int yc, SpriteLoc sl, Character main, Set<Enemy> en) {
-        super(xc, yc, sl, main, 10, 30, en);
+        super(xc, yc, sl, main, 5, 40, en);
         loc = new Location(xc,yc);  
         prevLoc = new Location(xc,yc);  
 

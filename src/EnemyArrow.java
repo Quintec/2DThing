@@ -6,7 +6,7 @@ public class EnemyArrow extends Weapon {
     private boolean hit;
 
     public EnemyArrow(Character s, int d, Container jc) {
-        super("Fireball", 0, s, d, jc, 32, 32, 15);
+        super("Fireball", 0, s, d, jc, 32, 32, 10);
         this.hit = false;
     }
 
