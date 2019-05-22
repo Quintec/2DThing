@@ -365,7 +365,7 @@ public class Game {
         underPanel.add(control, BorderLayout.WEST);
         underPanel.add(rightUnder, BorderLayout.CENTER);
 
-        mapX = 4;
+        mapX = 0;
         mapY = 0;
         
         initMap("map" + mapX + "," + mapY + ".txt");
@@ -390,11 +390,10 @@ public class Game {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (hppCount > 0) {
-                hppCount--;
-                main.incHP(20);
-                hpb.setText(hppCount + "");
-                mapPanel.requestFocus();
+            if (gold >= 20) {
+                gold -= 20;
+                hppCount++;
+                hpb.setText(hppCount+"");
             }
         }
         
@@ -404,11 +403,10 @@ public class Game {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (mppCount > 0) {
-                mppCount--;
-                main.incMP(20);
-                mpb.setText(mppCount + "");
-                mapPanel.requestFocus();
+            if (gold >= 20) {
+                gold -= 20;
+                mppCount++;
+                mpb.setText(mppCount+"");
             }
         }
         
@@ -523,17 +521,19 @@ public class Game {
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("H"), "hppotion");
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("M"), "mppotion");
         main.getActionMap().put("hppotion", new ActionWrapper((e) -> {
-            if (gold >= 20) {
-                gold -= 20;
-                hppCount++;
-                hpb.setText(hppCount+"");
+            if (hppCount > 0) {
+                hppCount--;
+                main.incHP(20);
+                hpb.setText(hppCount + "");
+                mapPanel.requestFocus();
             }
         }));
         main.getActionMap().put("mppotion", new ActionWrapper((e) -> {
-            if (gold >= 20) {
-                gold -= 20;
-                mppCount++;
-                mpb.setText(mppCount+"");
+            if (mppCount > 0) {
+                mppCount--;
+                main.incMP(20);
+                mpb.setText(mppCount + "");
+                mapPanel.requestFocus();
             }
         }));
     }
@@ -548,7 +548,7 @@ public class Game {
             
             JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
             
-            message = "You can buy HP and MP potions by typing the H and M keys, respectively.\nEach potion costs 20 gold and restores 20 points.\nUse the potions by clicking on the icons in your character info.";
+            message = "You can buy HP and MP potions by clicking the potion icons in your character info.\nEach potion costs 20 gold and restores 20 points.\nUse the potions by clicking H and M for HP and MP potions, respectively.";
             JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
             
         while (true) {
