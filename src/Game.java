@@ -124,6 +124,17 @@ public class Game {
         game = new Game();
         game.start();
         game.frame.setVisible(false);
+        xp = 0;
+        gold = 0;
+        xpPts = 0;
+        game.mppCount = 0;
+        game.hppCount = 0;
+        DAMAGE_MULTIPLIER = 1;
+        Character.MAX_HP = 100;
+        Character.MAX_MP = 100;
+        MP_REGEN_TIME = 30;
+        HP_REGEN_TIME = 30;
+        
         }
     }
     
@@ -167,7 +178,7 @@ public class Game {
                     MP_REGEN_TIME = (int) (MP_REGEN_TIME * 0.9);
                     break;
                 case 4:
-                    DAMAGE_MULTIPLIER *= 1.2;
+                    DAMAGE_MULTIPLIER *= 1.05;
                     break;
                 default:
                     throw new RuntimeException("I actually give up on life");
@@ -354,7 +365,7 @@ public class Game {
         underPanel.add(control, BorderLayout.WEST);
         underPanel.add(rightUnder, BorderLayout.CENTER);
 
-        mapX = 0;
+        mapX = 4;
         mapY = 0;
         
         initMap("map" + mapX + "," + mapY + ".txt");

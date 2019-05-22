@@ -45,16 +45,17 @@ public class Ring extends Weapon {
         adj.add(l);
         
         
-        if (Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) - 1][(int)(l.getY()) - 1]))
+        if (Game.main.isUnder() || (Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) - 1][(int)(l.getY()) - 1]) && Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY())])))
             adj.add(l.getTranslated(-1, -1));
-        if (Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY()) - 1]))
+        if (Game.main.isUnder() || (Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY()) - 1]) && Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY())])))
             adj.add(l.getTranslated(0, -1));
-        if (Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) + 1][(int)(l.getY()) - 1]))
+        if (Game.main.isUnder() || (Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) + 1][(int)(l.getY()) - 1]) && Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY())])))
             adj.add(l.getTranslated(1, -1));
     
-        
-        adj.add(l.getTranslated(1, 0));
-        adj.add(l.getTranslated(-1, 0));
+        if (Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) + 1][(int)(l.getY())]))
+            adj.add(l.getTranslated(1, 0));
+        if (Sprite.WALKABLE.contains(Game.map[(int)(l.getX()) - 1][(int)(l.getY())]))
+            adj.add(l.getTranslated(-1, 0));
         
         if (!Game.main.isUnder() || Sprite.WALKABLE.contains(Game.map[(int)(l.getX())][(int)(l.getY()) + 1]))
             adj.add(l.getTranslated(0, 1));
