@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.FontUIResource;
@@ -390,8 +391,8 @@ public class Game {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (gold >= 20) {
-                gold -= 20;
+            if (gold >= 50) {
+                gold -= 50;
                 hppCount++;
                 hpb.setText(hppCount+"");
             }
@@ -403,8 +404,8 @@ public class Game {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (gold >= 20) {
-                gold -= 20;
+            if (gold >= 50) {
+                gold -= 50;
                 mppCount++;
                 mpb.setText(mppCount+"");
             }
@@ -519,7 +520,9 @@ public class Game {
         main.getActionMap().put("interact", new InterAction());
         
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("H"), "hppotion");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("1"), "hppotion");
         main.getInputMap(IM).put(KeyStroke.getKeyStroke("M"), "mppotion");
+        main.getInputMap(IM).put(KeyStroke.getKeyStroke("2"), "mppotion");
         main.getActionMap().put("hppotion", new ActionWrapper((e) -> {
             if (hppCount > 0) {
                 hppCount--;
@@ -548,7 +551,7 @@ public class Game {
             
             JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
             
-            message = "You can buy HP and MP potions by clicking the potion icons in your character info.\nEach potion costs 20 gold and restores 20 points.\nUse the potions by clicking H and M for HP and MP potions, respectively.";
+            message = "You can buy HP and MP potions by clicking the potion icons in your character info.\nEach potion costs 50 gold and restores 20 points.\nUse the potions by clicking H (or 1) and M (or 2) for HP and MP potions, respectively.";
             JOptionPane.showMessageDialog(frame, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
             
         while (true) {
