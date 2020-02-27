@@ -1,2 +1,2 @@
-# 2D Thing
-2D thingy but honestly I have no clue what this is
+# Doodle Dungeon
+Fun, fast paced dungeon-style game featuring unique attacks with drawn shapes.
